@@ -1,4 +1,4 @@
-#include "snakegame.h"
+#include "snake_game.h"
 
 #include <QApplication>
 
