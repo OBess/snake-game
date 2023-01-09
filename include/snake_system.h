@@ -5,28 +5,25 @@
 
 #include <QVector2D>
 
+#include "apple.h"
+
 enum Direction : uint8_t
 {
-    Up = 1,
-    Right = 2,
-    Down = 4,
-    Left = 8,
-    UpLeft = Up | Left,
-    UpRight = Up | Right,
-    LeftUp = Left | Up,
-    RightUp = Right | Up,
-    DownLeft = Down | Left,
-    DownRight = Down | Right,
-    LeftDown = Left | Down,
-    RightDown = Right | Down
-};
-
-enum SnakeTiles : uint8_t
-{
-    Apple,
-    Head,
-    Body,
-    Tail
+    Invalid = 0,
+    Up,
+    Right,
+    Down,
+    Left,
+    Horizontal,
+    Vertical,
+    UpLeft,
+    UpRight,
+    LeftUp,
+    RightUp,
+    DownLeft,
+    DownRight,
+    LeftDown,
+    RightDown
 };
 
 constexpr QVector2D dirToVector(Direction direction) noexcept
@@ -55,31 +52,18 @@ constexpr QVector2D dirToVector(Direction direction) noexcept
     }
 }
 
-constexpr Direction idDirection(QVector2D lhs, QVector2D rhs) noexcept
+constexpr Direction vectorToDir(QVector2D vector) noexcept
 {
-    const auto vector = lhs - rhs;
-
-    int dir{};
-
-    if (vector.x() < 0)
-    {
-        dir |= Direction::Left;
-    }
-    else if (vector.x() > 0)
-    {
-        dir |= Direction::Right;
-    }
-
-    if (vector.y() < 0)
-    {
-        dir |= Direction::Up;
-    }
+    if (vector.x() > 0)
+        return Direction::Right;
+    else if (vector.x() < 0)
+        return Direction::Left;
     else if (vector.y() > 0)
-    {
-        dir |= Direction::Down;
-    }
+        return Direction::Down;
+    else if (vector.y() < 0)
+        return Direction::Up;
 
-    return static_cast<Direction>(dir);
+    return {};
 }
 
 class Snake
@@ -158,30 +142,6 @@ private:
 
     const uint8_t _initTaleSize = 5;
     std::vector<QVector2D> _tail;
-};
-
-class Apple
-{
-public:
-    Apple(QVector2D pos = QVector2D(0, 0))
-        : _pos{pos}
-    {
-    }
-
-    ~Apple() = default;
-
-    constexpr void setPos(QVector2D pos) noexcept
-    {
-        _pos = pos;
-    }
-
-    constexpr QVector2D getPos() const noexcept
-    {
-        return _pos;
-    }
-
-private:
-    QVector2D _pos;
 };
 
 #endif // SNAKE_SYSTEM_H
