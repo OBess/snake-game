@@ -8,7 +8,7 @@ namespace UI
 
     class SnakeField;
 
-}  // namespace UI
+} // namespace UI
 class Snake;
 class Apple;
 
@@ -25,8 +25,8 @@ private:
 
     void setupUI();
 
-    UI::SnakeField* _field = nullptr;
-    Snake* _snake = nullptr;
-    class Apple* _apple = nullptr;
+    UI::SnakeField *_field = nullptr;
+    Snake *_snake = nullptr;
+    class Apple *_apple = nullptr;
 };
 #endif // SNAKE_GAME_H

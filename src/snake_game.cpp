@@ -62,4 +62,3 @@ void SnakeGame::setupUI()
 
     setLayout(hLayout);
 }
-

@@ -131,7 +131,7 @@ public:
         return _headPosition;
     }
 
-    constexpr const std::vector<QVector2D>& tail() const noexcept
+    constexpr const std::vector<QVector2D> &tail() const noexcept
     {
         return _tail;
     }

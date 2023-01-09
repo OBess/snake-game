@@ -39,7 +39,6 @@ namespace UI
         }
 
     private:
-
         void resizeEvent(QResizeEvent *event) override
         {
             paintField(event->size());
@@ -64,16 +63,16 @@ namespace UI
                                getTileSprite(_snake->getDirection(), SnakeTiles::Head));
 
             // Draws snake body
-            const auto& tail = _snake->tail();
+            const auto &tail = _snake->tail();
 
             //// Draws first part
-            const auto& sprite = getBodyDir(headPos - tail[0], tail[0] - tail[1]);
+            const auto &sprite = getBodyDir(headPos - tail[0], tail[0] - tail[1]);
             painter.drawPixmap(getTileRect(tail[0] * _tileSize + _offset, _tileSize),
                                getTileSprite(sprite, SnakeTiles::Body));
 
             for (size_t i = 1; i < tail.size() - 1; ++i)
             {
-                const auto& sprite = getBodyDir(tail[i - 1] - tail[i], tail[i] - tail[i + 1]);
+                const auto &sprite = getBodyDir(tail[i - 1] - tail[i], tail[i] - tail[i + 1]);
                 painter.drawPixmap(getTileRect(tail[i] * _tileSize + _offset, _tileSize),
                                    getTileSprite(sprite, SnakeTiles::Body));
             }
@@ -127,28 +126,28 @@ namespace UI
             return QRect(point.toPoint(), QSize{size, size});
         }
 
-        inline const QPixmap& getTileSprite(Direction dir, SnakeTiles part) const
+        inline const QPixmap &getTileSprite(Direction dir, SnakeTiles part) const
         {
-            static const QPixmap  empty;
+            static const QPixmap empty;
 
-            static const QPixmap  apple("://resources/apple.png");
+            static const QPixmap apple("://resources/apple.png");
 
-            static const QPixmap  headUp("://resources/head_up.png");
-            static const QPixmap  headRight("://resources/head_right.png");
-            static const QPixmap  headDown("://resources/head_down.png");
-            static const QPixmap  headLeft("://resources/head_left.png");
+            static const QPixmap headUp("://resources/head_up.png");
+            static const QPixmap headRight("://resources/head_right.png");
+            static const QPixmap headDown("://resources/head_down.png");
+            static const QPixmap headLeft("://resources/head_left.png");
 
-            static const QPixmap  bodyHorizontal("://resources/body_horizontal.png");
-            static const QPixmap  bodyVertical("://resources/body_vertical.png");
-            static const QPixmap  bodyBottomLeft("://resources/body_bottomleft.png");
-            static const QPixmap  bodyBottomRight("://resources/body_bottomright.png");
-            static const QPixmap  bodyTopLeft("://resources/body_topleft.png");
-            static const QPixmap  bodyTopRight("://resources/body_topright.png");
+            static const QPixmap bodyHorizontal("://resources/body_horizontal.png");
+            static const QPixmap bodyVertical("://resources/body_vertical.png");
+            static const QPixmap bodyBottomLeft("://resources/body_bottomleft.png");
+            static const QPixmap bodyBottomRight("://resources/body_bottomright.png");
+            static const QPixmap bodyTopLeft("://resources/body_topleft.png");
+            static const QPixmap bodyTopRight("://resources/body_topright.png");
 
-            static const QPixmap  tailEndUp("://resources/tail_up.png");
-            static const QPixmap  tailEndRight("://resources/tail_right.png");
-            static const QPixmap  tailEndDown("://resources/tail_down.png");
-            static const QPixmap  tailEndLeft("://resources/tail_left.png");
+            static const QPixmap tailEndUp("://resources/tail_up.png");
+            static const QPixmap tailEndRight("://resources/tail_right.png");
+            static const QPixmap tailEndDown("://resources/tail_down.png");
+            static const QPixmap tailEndLeft("://resources/tail_left.png");
 
             if (part == SnakeTiles::Apple)
             {
@@ -226,8 +225,8 @@ namespace UI
         }
 
     private:
-        const Snake* _snake;
-        const class Apple* _apple;
+        const Snake *_snake;
+        const class Apple *_apple;
 
         uint16_t _tileSize = 1;
         QVector2D _offset;
