@@ -5,8 +5,6 @@
 
 #include <QVector2D>
 
-#include "apple.h"
-
 enum Direction : uint8_t
 {
     Invalid = 0,
