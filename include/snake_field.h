@@ -12,6 +12,13 @@
 
 namespace UI
 {
+    enum SnakeTiles : uint8_t
+    {
+        Apple,
+        Head,
+        Body,
+        Tail
+    };
 
     struct SnakeFieldArgs final
     {
@@ -49,29 +56,31 @@ namespace UI
 
             // Draws apple
             painter.drawPixmap(getTileRect(_apple->getPos() * _tileSize + _offset, _tileSize),
-                               getSprite({}, SnakeTiles::Apple));
+                               getTileSprite({}, SnakeTiles::Apple));
 
             // Draws snake head
             const auto headPos = _snake->headPos();
             painter.drawPixmap(getTileRect(headPos * _tileSize + _offset, _tileSize),
-                               getSprite(_snake->getDirection(), SnakeTiles::Head));
+                               getTileSprite(_snake->getDirection(), SnakeTiles::Head));
 
             // Draws snake body
             const auto& tail = _snake->tail();
 
             //// Draws first part
+            const auto& sprite = getBodyDir(headPos - tail[0], tail[0] - tail[1]);
             painter.drawPixmap(getTileRect(tail[0] * _tileSize + _offset, _tileSize),
-                               getSprite(idDirection(headPos, tail[1]), SnakeTiles::Body));
+                               getTileSprite(sprite, SnakeTiles::Body));
 
             for (size_t i = 1; i < tail.size() - 1; ++i)
             {
+                const auto& sprite = getBodyDir(tail[i - 1] - tail[i], tail[i] - tail[i + 1]);
                 painter.drawPixmap(getTileRect(tail[i] * _tileSize + _offset, _tileSize),
-                                   getSprite(idDirection(tail[i - 1], tail[i + 1]), SnakeTiles::Body));
+                                   getTileSprite(sprite, SnakeTiles::Body));
             }
 
             // Draws snake tail
             painter.drawPixmap(getTileRect(tail.back() * _tileSize + _offset, _tileSize),
-                               getSprite(idDirection(tail.back(), tail[tail.size() - 2]), SnakeTiles::Tail));
+                               getTileSprite(vectorToDir(tail.back() - tail[tail.size() - 2]), SnakeTiles::Tail));
 
             painter.end();
         }
@@ -118,7 +127,7 @@ namespace UI
             return QRect(point.toPoint(), QSize{size, size});
         }
 
-        inline const QPixmap& getSprite(Direction dir, SnakeTiles part) const
+        inline const QPixmap& getTileSprite(Direction dir, SnakeTiles part) const
         {
             static const QPixmap  empty;
 
@@ -158,17 +167,17 @@ namespace UI
             }
             else if (part == SnakeTiles::Body)
             {
-                if (dir == Direction::Left || dir == Direction::Right)
-                    return bodyHorizontal;
-                else if (dir == Direction::Up || dir == Direction::Down)
+                if (dir == Direction::Vertical)
                     return bodyVertical;
-                else if (dir == Direction::UpLeft || dir == Direction::RightDown)
+                else if (dir == Direction::Horizontal)
+                    return bodyHorizontal;
+                else if (dir == Direction::DownLeft)
                     return bodyBottomLeft;
-                else if (dir == Direction::UpRight || dir == Direction::LeftDown)
+                else if (dir == Direction::DownRight)
                     return bodyBottomRight;
-                else if (dir == Direction::LeftUp || dir == Direction::DownRight)
+                else if (dir == Direction::LeftUp)
                     return bodyTopRight;
-                else if (dir == Direction::RightUp || dir == Direction::DownLeft)
+                else if (dir == Direction::RightUp)
                     return bodyTopLeft;
             }
             else if (part == SnakeTiles::Tail)
@@ -184,6 +193,36 @@ namespace UI
             }
 
             return empty;
+        }
+
+        constexpr Direction getBodyDir(QVector2D lhs, QVector2D rhs) noexcept
+        {
+            if (lhs.x() == 0 && rhs.x() == 0)
+            {
+                return Direction::Vertical;
+            }
+            else if (lhs.y() == 0 && rhs.y() == 0)
+            {
+                return Direction::Horizontal;
+            }
+            else if ((lhs.x() < 0 && rhs.y() < 0) || (lhs.y() > 0 && rhs.x() > 0))
+            {
+                return Direction::DownLeft;
+            }
+            else if ((lhs.y() > 0 && rhs.x() < 0) || (lhs.x() > 0 && rhs.y() < 0))
+            {
+                return Direction::DownRight;
+            }
+            else if ((lhs.y() < 0 && rhs.x() > 0) || (lhs.x() < 0 && rhs.y() > 0))
+            {
+                return Direction::RightUp;
+            }
+            else if ((lhs.y() < 0 && rhs.x() < 0) || (lhs.x() > 0 && rhs.y() > 0))
+            {
+                return Direction::LeftUp;
+            }
+
+            return Direction::Invalid;
         }
 
     private:
