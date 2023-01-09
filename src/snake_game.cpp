@@ -23,19 +23,19 @@ SnakeGame::~SnakeGame()
 
 void SnakeGame::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_W)
+    if (event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
     {
         _snake->setDirection(Direction::Up);
     }
-    else if (event->key() == Qt::Key_D)
+    else if (event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
     {
         _snake->setDirection(Direction::Right);
     }
-    else if (event->key() == Qt::Key_S)
+    else if (event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
     {
         _snake->setDirection(Direction::Down);
     }
-    else if (event->key() == Qt::Key_A)
+    else if (event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
     {
         _snake->setDirection(Direction::Left);
     }
