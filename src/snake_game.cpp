@@ -19,6 +19,7 @@ SnakeGame::SnakeGame(QWidget *parent)
 SnakeGame::~SnakeGame()
 {
     delete _snake;
+    delete _apple;
 }
 
 void SnakeGame::keyPressEvent(QKeyEvent *event)
