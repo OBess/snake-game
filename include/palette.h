@@ -11,6 +11,8 @@ namespace Palette
     [[maybe_unused]] constexpr QColor tileYellow(255, 255, 0);
 
     [[maybe_unused]] constexpr QColor transparency(0, 0, 0, 0);
+
+    [[maybe_unused]] constexpr QColor cup(255, 210, 0);
 }
 
 #endif // PALETTE_H

@@ -37,6 +37,7 @@ namespace UI
             : QOpenGLWidget{parent}, _snake{args.snake}, _apple{args.apple},
               _cols(args.fieldSize.width()), _rows(args.fieldSize.height())
         {
+            setMinimumSize(970, 500);
         }
 
     private:
@@ -48,6 +49,8 @@ namespace UI
 
         void paintEvent(QPaintEvent *event) override
         {
+            Q_UNUSED(event);
+
             QPainter painter;
             painter.begin(this);
 
@@ -56,12 +59,12 @@ namespace UI
 
             // Draws apple
             painter.drawPixmap(getTileRect(_apple->position * _tileSize + _offset, _tileSize),
-                               getTileSprite({}, SnakeTiles::Apple));
+                               getSprite({}, SnakeTiles::Apple));
 
             // Draws snake head
             const auto headPos = _snake->headPos();
             painter.drawPixmap(getTileRect(headPos * _tileSize + _offset, _tileSize),
-                               getTileSprite(_snake->getDirection(), SnakeTiles::Head));
+                               getSprite(_snake->getDirection(), SnakeTiles::Head));
 
             // Draws snake body
             const auto &body = _snake->body();
@@ -69,19 +72,19 @@ namespace UI
             //// Draws first part of body
             const auto &sprite = getBodyDir(headPos - body[0], body[0] - body[1]);
             painter.drawPixmap(getTileRect(body[0] * _tileSize + _offset, _tileSize),
-                               getTileSprite(sprite, SnakeTiles::Body));
+                               getSprite(sprite, SnakeTiles::Body));
 
             //// Draws rest parts
             for (size_t i = 1; i < body.size() - 1; ++i)
             {
                 const auto &sprite = getBodyDir(body[i - 1] - body[i], body[i] - body[i + 1]);
                 painter.drawPixmap(getTileRect(body[i] * _tileSize + _offset, _tileSize),
-                                   getTileSprite(sprite, SnakeTiles::Body));
+                                   getSprite(sprite, SnakeTiles::Body));
             }
 
             // Draws snake tail
             painter.drawPixmap(getTileRect(body.back() * _tileSize + _offset, _tileSize),
-                               getTileSprite(vectorToDir(body.back() - body[body.size() - 2]), SnakeTiles::Tail));
+                               getSprite(vectorToDir(body.back() - body[body.size() - 2]), SnakeTiles::Tail));
 
             painter.end();
         }
@@ -138,7 +141,7 @@ namespace UI
         /// @param dir 
         /// @param part 
         /// @return 
-        inline const QPixmap &getTileSprite(Direction dir, SnakeTiles part) const
+        inline const QPixmap &getSprite(Direction dir, SnakeTiles part) const
         {
             static const QPixmap empty;
 

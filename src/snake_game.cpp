@@ -1,10 +1,11 @@
 #include "snake_game.h"
 
 #include <QDebug>
-#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "palette.h"
 #include "snake_field.h"
+#include "snake_score.h"
 #include "snake_system.h"
 
 SnakeGame::SnakeGame(QWidget *parent)
@@ -48,17 +49,19 @@ void SnakeGame::keyPressEvent(QKeyEvent *event)
 void SnakeGame::setupUI()
 {
     setWindowTitle("SnakeGame");
-    setMinimumSize(980, 640);
 
     // Sets background color to widget
     QPalette windowPalette = palette();
     windowPalette.setColor(QPalette::Window, Palette::background);
     setPalette(windowPalette);
 
-    QHBoxLayout *hLayout = new QHBoxLayout(this);
+    QVBoxLayout *vLayout = new QVBoxLayout(this);
+
+    _score = new UI::SnakeScore(10, this);
+    vLayout->addWidget(_score);
 
     _field = new UI::SnakeField({_snake, _apple, {28, 14}}, this);
-    hLayout->addWidget(_field);
+    vLayout->addWidget(_field);
 
-    setLayout(hLayout);
+    setLayout(vLayout);
 }

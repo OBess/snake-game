@@ -15,5 +15,7 @@
         <file>resources/tail_left.png</file>
         <file>resources/tail_right.png</file>
         <file>resources/tail_up.png</file>
+        <file>resources/cup.png</file>
+        <file>resources/goal.png</file>
     </qresource>
 </RCC>
