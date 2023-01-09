@@ -57,7 +57,7 @@ void SnakeGame::setupUI()
 
     QHBoxLayout *hLayout = new QHBoxLayout(this);
 
-    _field = new UI::SnakeField({_snake, _apple, {14, 28}}, this);
+    _field = new UI::SnakeField({_snake, _apple, {28, 14}}, this);
     hLayout->addWidget(_field);
 
     setLayout(hLayout);
