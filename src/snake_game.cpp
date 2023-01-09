@@ -11,7 +11,7 @@ SnakeGame::SnakeGame(QWidget *parent)
     : QWidget(parent)
 {
     _snake = new Snake(Direction::Up, {0, 0});
-    _apple = new class Apple({5, 5});
+    _apple = new Apple({5, 5});
 
     setupUI();
 }

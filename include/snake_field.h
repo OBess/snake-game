@@ -23,7 +23,7 @@ namespace UI
     struct SnakeFieldArgs final
     {
         const Snake *snake;
-        const class Apple *apple;
+        const struct Apple *apple;
         uint16_t rows;
         uint16_t cols;
     };
@@ -54,7 +54,7 @@ namespace UI
             painter.drawPixmap(0, 0, _cashedGrid);
 
             // Draws apple
-            painter.drawPixmap(getTileRect(_apple->getPos() * _tileSize + _offset, _tileSize),
+            painter.drawPixmap(getTileRect(_apple->position * _tileSize + _offset, _tileSize),
                                getTileSprite({}, SnakeTiles::Apple));
 
             // Draws snake head
@@ -63,23 +63,23 @@ namespace UI
                                getTileSprite(_snake->getDirection(), SnakeTiles::Head));
 
             // Draws snake body
-            const auto &tail = _snake->tail();
+            const auto &body = _snake->body();
 
             //// Draws first part
-            const auto &sprite = getBodyDir(headPos - tail[0], tail[0] - tail[1]);
-            painter.drawPixmap(getTileRect(tail[0] * _tileSize + _offset, _tileSize),
+            const auto &sprite = getBodyDir(headPos - body[0], body[0] - body[1]);
+            painter.drawPixmap(getTileRect(body[0] * _tileSize + _offset, _tileSize),
                                getTileSprite(sprite, SnakeTiles::Body));
 
-            for (size_t i = 1; i < tail.size() - 1; ++i)
+            for (size_t i = 1; i < body.size() - 1; ++i)
             {
-                const auto &sprite = getBodyDir(tail[i - 1] - tail[i], tail[i] - tail[i + 1]);
-                painter.drawPixmap(getTileRect(tail[i] * _tileSize + _offset, _tileSize),
+                const auto &sprite = getBodyDir(body[i - 1] - body[i], body[i] - body[i + 1]);
+                painter.drawPixmap(getTileRect(body[i] * _tileSize + _offset, _tileSize),
                                    getTileSprite(sprite, SnakeTiles::Body));
             }
 
             // Draws snake tail
-            painter.drawPixmap(getTileRect(tail.back() * _tileSize + _offset, _tileSize),
-                               getTileSprite(vectorToDir(tail.back() - tail[tail.size() - 2]), SnakeTiles::Tail));
+            painter.drawPixmap(getTileRect(body.back() * _tileSize + _offset, _tileSize),
+                               getTileSprite(vectorToDir(body.back() - body[body.size() - 2]), SnakeTiles::Tail));
 
             painter.end();
         }
@@ -226,7 +226,7 @@ namespace UI
 
     private:
         const Snake *_snake;
-        const class Apple *_apple;
+        const struct Apple *_apple;
 
         uint16_t _tileSize = 1;
         QVector2D _offset;

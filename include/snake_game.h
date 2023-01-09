@@ -10,7 +10,7 @@ namespace UI
 
 } // namespace UI
 class Snake;
-class Apple;
+struct Apple;
 
 class SnakeGame : public QWidget
 {
@@ -27,6 +27,6 @@ private:
 
     UI::SnakeField *_field = nullptr;
     Snake *_snake = nullptr;
-    class Apple *_apple = nullptr;
+    Apple *_apple = nullptr;
 };
 #endif // SNAKE_GAME_H

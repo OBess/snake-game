@@ -3,28 +3,14 @@
 
 #include <QVector2D>
 
-class Apple
+struct Apple final
 {
-public:
-    Apple(QVector2D pos = {0, 0})
-        : _pos{pos}
+    QVector2D position;
+
+    constexpr Apple(QVector2D pos = {0, 0}) noexcept
+        : position{pos}
     {
     }
-
-    ~Apple() = default;
-
-    constexpr void setPos(QVector2D pos) noexcept
-    {
-        _pos = pos;
-    }
-
-    constexpr QVector2D getPos() const noexcept
-    {
-        return _pos;
-    }
-
-private:
-    QVector2D _pos;
 };
 
 #endif // APPLE_H

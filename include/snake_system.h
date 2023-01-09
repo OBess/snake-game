@@ -74,14 +74,14 @@ public:
     {
         const QVector2D opositeDir = dirToVector(direction) * -1;
 
-        _tail.reserve(_initTaleSize * 10);
-        _tail.resize(_initTaleSize);
+        _body.reserve(_initTaleSize * 10);
+        _body.resize(_initTaleSize);
 
-        _tail[0] = _headPosition + opositeDir;
+        _body[0] = _headPosition + opositeDir;
 
-        for (size_t i = 1; i < _tail.size(); ++i)
+        for (size_t i = 1; i < _body.size(); ++i)
         {
-            _tail[i] = _tail[i - 1] + opositeDir;
+            _body[i] = _body[i - 1] + opositeDir;
         }
     }
 
@@ -90,12 +90,12 @@ public:
     inline void move() noexcept
     {
         // Moves tail
-        for (size_t i = _tail.size() - 1; i > 0; --i)
+        for (size_t i = _body.size() - 1; i > 0; --i)
         {
-            _tail[i] = _tail[i - 1];
+            _body[i] = _body[i - 1];
         }
 
-        _tail[0] = _headPosition;
+        _body[0] = _headPosition;
 
         // Moves head
         _headPosition += dirToVector(_direction);
@@ -103,7 +103,7 @@ public:
 
     constexpr void addTailPart()
     {
-        _tail.push_back(_tail.back());
+        _body.push_back(_body.back());
     }
 
     constexpr Direction getDirection() const noexcept
@@ -116,24 +116,14 @@ public:
         _direction = direction;
     }
 
-    constexpr void rotateLeft() noexcept
-    {
-        _direction = static_cast<Direction>((_direction - 1) % 2);
-    }
-
-    constexpr void rotateRight() noexcept
-    {
-        _direction = static_cast<Direction>((_direction + 1) % 2);
-    }
-
     constexpr QVector2D headPos() const noexcept
     {
         return _headPosition;
     }
 
-    constexpr const std::vector<QVector2D> &tail() const noexcept
+    constexpr const std::vector<QVector2D> &body() const noexcept
     {
-        return _tail;
+        return _body;
     }
 
 private:
@@ -141,7 +131,7 @@ private:
     QVector2D _headPosition;
 
     const uint8_t _initTaleSize = 5;
-    std::vector<QVector2D> _tail;
+    std::vector<QVector2D> _body;
 };
 
 #endif // SNAKE_SYSTEM_H
