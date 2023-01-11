@@ -4,9 +4,9 @@
 #include <QVBoxLayout>
 
 #include "palette.h"
+#include "snake.h"
 #include "snake_field.h"
 #include "snake_score.h"
-#include "snake_system.h"
 
 SnakeGame::SnakeGame(QWidget *parent)
     : QWidget(parent)

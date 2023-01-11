@@ -9,7 +9,7 @@
 
 #include "apple.h"
 #include "palette.h"
-#include "snake_system.h"
+#include "snake.h"
 
 namespace UI
 {
