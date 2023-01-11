@@ -60,7 +60,7 @@ void SnakeGame::setupUI()
     _score = new UI::SnakeScore(10, this);
     vLayout->addWidget(_score);
 
-    _field = new UI::SnakeField({_snake, _apple, {28, 14}}, this);
+    _field = new UI::SnakeField({_snake, _apple, 28, 14}, this);
     vLayout->addWidget(_field);
 
     setLayout(vLayout);

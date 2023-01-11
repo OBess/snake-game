@@ -25,7 +25,8 @@ namespace UI
     {
         const Snake *snake;
         const struct Apple *apple;
-        QSize fieldSize;
+        uint32_t cols;
+        uint32_t rols;
     };
 
     class SnakeField : public QOpenGLWidget
@@ -35,16 +36,22 @@ namespace UI
     public:
         explicit SnakeField(SnakeFieldArgs args, QWidget *parent = nullptr)
             : QOpenGLWidget{parent}, _snake{args.snake}, _apple{args.apple},
-              _cols(args.fieldSize.width()), _rows(args.fieldSize.height())
+              _cols(args.cols), _rows(args.rols)
         {
             setMinimumSize(970, 500);
+
+            // Draws the field once on the start of program
+            _tileSize = rect().width() / _cols;
+            _offset = QVector2D((rect().width() - _tileSize * _cols) / 2,
+                                (rect().height() - _tileSize * _rows) / 2);
+            paintField();
         }
 
     private:
+        //
         void resizeEvent(QResizeEvent *event) override
         {
-            paintField(event->size());
-            update();
+            Q_UNUSED(event);
         }
 
         void paintEvent(QPaintEvent *event) override
@@ -89,32 +96,26 @@ namespace UI
             painter.end();
         }
 
-        /// @brief Redraws tiles for grid and caches to QPixmap
+        /// @brief Draws tiles for grid and caches to QPixmap
         /// @param rect Size of the field
-        inline void paintField(const QSize &rect)
+        inline void paintField()
         {
-            _cachedGrid = QPixmap(rect);
+            _cachedGrid = QPixmap(rect().size());
             _cachedGrid.fill(Palette::background);
 
             QPainter painter;
             painter.begin(&_cachedGrid);
 
-            painter.setPen(QPen(Palette::transparency));
+            uint32_t x = _offset.x();
+            uint32_t y = _offset.y();
+            uint32_t step = 0;
 
-            _tileSize = rect.width() / _cols;
-            _offset = QVector2D((rect.width() - _tileSize * _cols) / 2,
-                                (rect.height() - _tileSize * _rows) / 2);
-
-            uint16_t x = _offset.x();
-            uint16_t y = _offset.y();
-            uint16_t step = 0;
-
-            for (uint16_t i = 0; i < _rows; ++i)
+            for (uint32_t i = 0; i < _rows; ++i)
             {
-                for (uint16_t j = 0; j < _cols; ++j)
+                for (uint32_t j = 0; j < _cols; ++j)
                 {
-                    painter.setBrush(step % 2 ? Palette::tileGreen : Palette::tileYellow);
-                    painter.drawRect(x, y, _tileSize, _tileSize);
+                    painter.fillRect(x, y, _tileSize, _tileSize,
+                                     step % 2 ? Palette::tileGreen : Palette::tileYellow);
 
                     x += _tileSize;
                     ++step;
@@ -132,9 +133,9 @@ namespace UI
         /// @param point Position to start draw a tile
         /// @param size Size of one tile
         /// @return QRect for one tile
-        constexpr QRect getTileRect(QVector2D point, uint16_t size) const noexcept
+        constexpr QRect getTileRect(QVector2D point, uint32_t size) const noexcept
         {
-            return QRect(point.toPoint(), QSize{size, size});
+            return QRect(point.toPoint(), QSize(size, size));
         }
 
         /// @brief 
@@ -247,13 +248,13 @@ namespace UI
         const Snake *_snake;
         const struct Apple *_apple;
 
-        uint16_t _tileSize = 1;
+        uint32_t _tileSize = 1;
         QVector2D _offset;
 
         QPixmap _cachedGrid;
 
-        const uint16_t _cols{28};
-        const uint16_t _rows{14};
+        const uint32_t _cols;
+        const uint32_t _rows;
     };
 
 } // namespane UI

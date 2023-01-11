@@ -23,7 +23,7 @@ namespace UI
         explicit SnakeScore(uint32_t bestScore, QWidget *parent = nullptr)
             : QOpenGLWidget(parent), _bestScore(bestScore)
         {
-            setMinimumHeight(50);
+            setFixedHeight(50);
         }
 
         constexpr uint32_t bestScore() const noexcept
