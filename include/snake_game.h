@@ -3,12 +3,6 @@
 
 #include <QWidget>
 
-namespace UI
-{
-
-    class SnakeField;
-
-} // namespace UI
 class Snake;
 struct Apple;
 class Score;
@@ -26,7 +20,6 @@ private:
 
     void setupUI();
 
-    UI::SnakeField *_field = nullptr;
     Snake *_snake = nullptr;
     Apple *_apple = nullptr;
     Score *_score = nullptr;
