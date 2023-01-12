@@ -1,11 +1,9 @@
 #ifndef SNAKE_FIELD_H
 #define SNAKE_FIELD_H
 
-#include <QDebug>
 #include <QOpenGLWidget>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QPixmap>
 
 #include "apple.h"
 #include "direction.h"

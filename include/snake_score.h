@@ -1,7 +1,6 @@
 #ifndef SNAKE_SCORE_H
 #define SNAKE_SCORE_H
 
-#include <QDebug>
 #include <QOpenGLWidget>
 #include <QPainter>
 

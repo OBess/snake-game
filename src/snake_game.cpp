@@ -1,6 +1,5 @@
 #include "snake_game.h"
 
-#include <QDebug>
 #include <QVBoxLayout>
 
 #include "direction.h"
