@@ -44,19 +44,19 @@ namespace UI
             // Draws tiles for field
             paintField(painter, event);
 
-            // Draws apple
+            // Draws an apple
             painter.drawPixmap(getTileRect(_apple->position * _tileSize + _offset, _tileSize),
                                Sprites::getSprite(Sprites::Apple));
 
-            // Draws snake head
+            // Draws a snake head
             const auto headPos = _snake->headPos();
             painter.drawPixmap(getTileRect(headPos * _tileSize + _offset, _tileSize),
                                Sprites::getSprite(_snake->getDirection(), Sprites::SnakeHead));
 
-            // Draws snake body
+            // Draws a snake body
             const auto &body = _snake->body();
 
-            //// Draws first part of body
+            //// Draws the first part of body
             const auto &bodyDir = getBodyDir(headPos - body[0], body[0] - body[1]);
             painter.drawPixmap(getTileRect(body[0] * _tileSize + _offset, _tileSize),
                                Sprites::getSprite(bodyDir, Sprites::SnakeBody));
@@ -69,7 +69,7 @@ namespace UI
                                    Sprites::getSprite(bodyDir, Sprites::SnakeBody));
             }
 
-            // Draws snake tail
+            // Draws a snake tail
             painter.drawPixmap(getTileRect(body.back() * _tileSize + _offset, _tileSize),
                                Sprites::getSprite(vectorToDir(body.back() - body[body.size() - 2]),
                                                   Sprites::SnakeTail));
