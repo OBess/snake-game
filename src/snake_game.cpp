@@ -54,7 +54,7 @@ void SnakeGame::setupUI()
 {
     setWindowTitle("SnakeGame");
 
-    // Sets background color to widget
+    // Sets the background color to widget
     QPalette windowPalette = palette();
     windowPalette.setColor(QPalette::Window, Palette::background);
     setPalette(windowPalette);
@@ -69,6 +69,6 @@ void SnakeGame::setupUI()
     auto snakeField = new UI::SnakeField({_snake, _apple, 28, 14}, this);
     vLayout->addWidget(snakeField);
 
-    // Sets layout
+    // Sets the layout
     setLayout(vLayout);
 }
