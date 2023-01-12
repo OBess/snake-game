@@ -6,6 +6,7 @@
 #include <QPainter>
 
 #include "palette.h"
+#include "score.h"
 #include "sprites.h"
 
 namespace UI
@@ -15,23 +16,10 @@ namespace UI
         Q_OBJECT
 
     public:
-        explicit SnakeScore(uint32_t bestScore, QWidget *parent = nullptr)
-            : QOpenGLWidget(parent), _bestScore(bestScore)
+        explicit SnakeScore(const Score* score, QWidget *parent = nullptr)
+            : QOpenGLWidget(parent), _score(score)
         {
             setFixedHeight(50);
-        }
-
-        constexpr uint32_t bestScore() const noexcept
-        {
-            return _bestScore;
-        }
-
-        constexpr void incrementScroe() noexcept
-        {
-            ++_currentScore;
-
-            if (_currentScore > _bestScore)
-                _bestScore = _currentScore;
         }
 
     private:
@@ -46,8 +34,8 @@ namespace UI
             painter.fillRect(rect(), Palette::background);
 
             // Draws texts
-            const QString bestScore(QString::number(_bestScore));
-            const QString curScore(QString::number(_currentScore));
+            const QString bestScore(QString::number(_score->bestScore()));
+            const QString curScore(QString::number(_score->currentScore()));
 
             painter.setFont(QFont("Arial", 20, QFont::DemiBold));
 
@@ -67,8 +55,7 @@ namespace UI
         }
 
     private:
-        uint32_t _bestScore;
-        uint32_t _currentScore{0};
+        const Score *_score;
     };
 
 } // namespace UI

@@ -7,11 +7,11 @@ namespace UI
 {
 
     class SnakeField;
-    class SnakeScore;
 
 } // namespace UI
 class Snake;
 struct Apple;
+class Score;
 
 class SnakeGame : public QWidget
 {
@@ -27,8 +27,8 @@ private:
     void setupUI();
 
     UI::SnakeField *_field = nullptr;
-    UI::SnakeScore *_score = nullptr;
     Snake *_snake = nullptr;
     Apple *_apple = nullptr;
+    Score *_score = nullptr;
 };
 #endif // SNAKE_GAME_H

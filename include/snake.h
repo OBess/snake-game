@@ -18,6 +18,8 @@ public:
 
     ~Snake() = default;
 
+    /// @brief Moves the snake head forward corresponding to direction,
+    /// saving rest done rotations
     inline void move() noexcept
     {
         // Moves tail
@@ -58,7 +60,7 @@ public:
     }
 
 private:
-    /// @brief 
+    /// @brief Initialize the snake body on the constructor
     inline void init()
     {
         const QVector2D opositeDir = dirToVector(_direction) * -1;

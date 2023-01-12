@@ -25,10 +25,10 @@ namespace UI
             Goal
         };
 
-        /// @brief 
-        /// @param dir 
-        /// @param type 
-        /// @return 
+        /// @brief Returns a loaded sprite corresponding to the direction and type of sprite
+        /// @param dir Direction of the sprite
+        /// @param type Sprite type
+        /// @return Image
         inline const QPixmap &getSprite(Direction dir, Type type)
         {
             // Invalid type
@@ -105,9 +105,9 @@ namespace UI
             return empty;
         }
 
-        /// @brief 
-        /// @param type 
-        /// @return 
+        /// @brief Returns a loaded sprite corresponding only to the type of sprite
+        /// @param type Sprite type
+        /// @return Iamge
         inline const QPixmap &getSprite(Type type)
         {
             return getSprite({}, type);

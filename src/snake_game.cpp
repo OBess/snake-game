@@ -5,6 +5,7 @@
 
 #include "direction.h"
 #include "palette.h"
+#include "score.h"
 #include "snake.h"
 #include "snake_field.h"
 #include "snake_score.h"
@@ -14,6 +15,7 @@ SnakeGame::SnakeGame(QWidget *parent)
 {
     _snake = new Snake(Direction::Up, {0, 0});
     _apple = new Apple({5, 5});
+    _score = new Score(5);
 
     setupUI();
 }
@@ -22,6 +24,7 @@ SnakeGame::~SnakeGame()
 {
     delete _snake;
     delete _apple;
+    delete _score;
 }
 
 void SnakeGame::keyPressEvent(QKeyEvent *event)
@@ -58,11 +61,14 @@ void SnakeGame::setupUI()
 
     QVBoxLayout *vLayout = new QVBoxLayout(this);
 
-    _score = new UI::SnakeScore(10, this);
-    vLayout->addWidget(_score);
+    // Creates the snake score widget
+    auto snakeScore = new UI::SnakeScore(_score, this);
+    vLayout->addWidget(snakeScore);
 
+    // Creates the snake field widget
     _field = new UI::SnakeField({_snake, _apple, 28, 14}, this);
     vLayout->addWidget(_field);
 
+    // Sets layout
     setLayout(vLayout);
 }

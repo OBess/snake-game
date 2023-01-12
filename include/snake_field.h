@@ -124,10 +124,10 @@ namespace UI
             return QRect(point.toPoint(), QSize(size, size));
         }
 
-        /// @brief 
-        /// @param lhs 
-        /// @param rhs 
-        /// @return 
+        /// @brief Gets vectors to and from the current body and returns proper direction for getting sprite
+        /// @param lhs A vector that directed to the current body part
+        /// @param rhs A vector that directed from the current body part
+        /// @return Direction
         constexpr Direction getBodyDir(QVector2D lhs, QVector2D rhs) noexcept
         {
             if (lhs.x() == 0 && rhs.x() == 0)

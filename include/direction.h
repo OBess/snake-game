@@ -25,9 +25,9 @@ enum Direction : uint8_t
     RightDown
 };
 
-/// @brief 
-/// @param direction 
-/// @return 
+/// @brief It gets direction like an enum and converts to a vector object
+/// @param direction Direction
+/// @return QVector2D
 constexpr QVector2D dirToVector(Direction direction) noexcept
 {
     switch (direction)
@@ -54,18 +54,18 @@ constexpr QVector2D dirToVector(Direction direction) noexcept
     }
 }
 
-/// @brief 
-/// @param vector 
-/// @return 
-constexpr Direction vectorToDir(QVector2D vector) noexcept
+/// @brief It gets direction like a vector and converts to an enum Direction
+/// @param vector QVector2D
+/// @returnDirection
+constexpr Direction vectorToDir(QVector2D direction) noexcept
 {
-    if (vector.x() > 0)
+    if (direction.x() > 0)
         return Direction::Right;
-    else if (vector.x() < 0)
+    else if (direction.x() < 0)
         return Direction::Left;
-    else if (vector.y() > 0)
+    else if (direction.y() > 0)
         return Direction::Down;
-    else if (vector.y() < 0)
+    else if (direction.y() < 0)
         return Direction::Up;
 
     return {};
