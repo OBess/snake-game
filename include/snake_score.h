@@ -39,13 +39,13 @@ namespace UI
 
             painter.setFont(QFont("Arial", 20, QFont::DemiBold));
 
-            //// Draws best score
+            //// Draws the best score
             painter.drawPixmap(QRect(0, 0, 50, 50), Sprites::getSprite(Sprites::Cup));
 
             painter.setPen(Palette::cup);
             painter.drawText(QRect(52, 0, 60, 50), Qt::AlignVCenter, bestScore);
 
-            //// Draws current score
+            //// Draws the current score
             painter.drawPixmap(QRect(115, 0, 50, 50), Sprites::getSprite(Sprites::Goal));
 
             painter.setPen(Qt::white);
