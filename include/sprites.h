@@ -107,7 +107,7 @@ namespace UI
 
         /// @brief Returns a loaded sprite corresponding only to the type of sprite
         /// @param type Sprite type
-        /// @return Iamge
+        /// @return Image
         inline const QPixmap &getSprite(Type type)
         {
             return getSprite({}, type);
