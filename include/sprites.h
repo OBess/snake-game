@@ -25,6 +25,10 @@ namespace UI
             Goal
         };
 
+        /// @brief 
+        /// @param dir 
+        /// @param type 
+        /// @return 
         inline const QPixmap &getSprite(Direction dir, Type type)
         {
             // Invalid type
@@ -101,6 +105,9 @@ namespace UI
             return empty;
         }
 
+        /// @brief 
+        /// @param type 
+        /// @return 
         inline const QPixmap &getSprite(Type type)
         {
             return getSprite({}, type);

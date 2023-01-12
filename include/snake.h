@@ -1,5 +1,5 @@
-#ifndef SNAKE_SYSTEM_H
-#define SNAKE_SYSTEM_H
+#ifndef SNAKE_H
+#define SNAKE_H
 
 #include <vector>
 
@@ -58,6 +58,7 @@ public:
     }
 
 private:
+    /// @brief 
     inline void init()
     {
         const QVector2D opositeDir = dirToVector(_direction) * -1;
@@ -81,4 +82,4 @@ private:
     std::vector<QVector2D> _body;
 };
 
-#endif // SNAKE_SYSTEM_H
+#endif // SNAKE_H

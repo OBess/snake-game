@@ -25,6 +25,9 @@ enum Direction : uint8_t
     RightDown
 };
 
+/// @brief 
+/// @param direction 
+/// @return 
 constexpr QVector2D dirToVector(Direction direction) noexcept
 {
     switch (direction)
@@ -51,6 +54,9 @@ constexpr QVector2D dirToVector(Direction direction) noexcept
     }
 }
 
+/// @brief 
+/// @param vector 
+/// @return 
 constexpr Direction vectorToDir(QVector2D vector) noexcept
 {
     if (vector.x() > 0)

@@ -13,6 +13,6 @@ namespace Palette
     [[maybe_unused]] constexpr QColor transparency(0, 0, 0, 0);
 
     [[maybe_unused]] constexpr QColor cup(255, 210, 0);
-}
+} // namespace Palette
 
 #endif // PALETTE_H

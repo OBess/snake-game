@@ -36,7 +36,6 @@ namespace UI
         }
 
     private:
-
         void paintEvent(QPaintEvent *event) override
         {
             QPainter painter;
@@ -81,7 +80,7 @@ namespace UI
         /// @brief Draws tiles for grid
         /// @param painter Where to draw
         /// @param event Gets rect of the area
-        inline void paintField(QPainter& painter, QPaintEvent *event)
+        inline void paintField(QPainter &painter, QPaintEvent *event)
         {
             painter.save();
 
