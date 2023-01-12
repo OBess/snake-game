@@ -16,8 +16,6 @@ public:
         init();
     }
 
-    ~Snake() = default;
-
     /// @brief Moves the snake head forward corresponding to direction,
     /// saving rest done rotations
     inline void move() noexcept
