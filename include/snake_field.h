@@ -8,25 +8,19 @@
 #include <QPixmap>
 
 #include "apple.h"
+#include "direction.h"
 #include "palette.h"
 #include "snake.h"
+#include "sprites.h"
 
 namespace UI
 {
-    enum SnakeTiles : uint8_t
-    {
-        Apple,
-        Head,
-        Body,
-        Tail
-    };
-
     struct SnakeFieldArgs final
     {
         const Snake *snake;
         const struct Apple *apple;
-        uint32_t cols;
-        uint32_t rols;
+        int32_t cols;
+        int32_t rols;
     };
 
     class SnakeField : public QOpenGLWidget
@@ -39,175 +33,96 @@ namespace UI
               _cols(args.cols), _rows(args.rols)
         {
             setMinimumSize(970, 500);
-
-            // Draws the field once on the start of program
-            _tileSize = rect().width() / _cols;
-            _offset = QVector2D((rect().width() - _tileSize * _cols) / 2,
-                                (rect().height() - _tileSize * _rows) / 2);
-            paintField();
         }
 
     private:
-        //
-        void resizeEvent(QResizeEvent *event) override
-        {
-            Q_UNUSED(event);
-        }
 
         void paintEvent(QPaintEvent *event) override
         {
-            Q_UNUSED(event);
-
             QPainter painter;
             painter.begin(this);
 
-            // Draws cached tiles for field
-            painter.drawPixmap(0, 0, _cachedGrid);
+            // Draws tiles for field
+            paintField(painter, event);
 
             // Draws apple
             painter.drawPixmap(getTileRect(_apple->position * _tileSize + _offset, _tileSize),
-                               getSprite({}, SnakeTiles::Apple));
+                               Sprites::getSprite(Sprites::Apple));
 
             // Draws snake head
             const auto headPos = _snake->headPos();
             painter.drawPixmap(getTileRect(headPos * _tileSize + _offset, _tileSize),
-                               getSprite(_snake->getDirection(), SnakeTiles::Head));
+                               Sprites::getSprite(_snake->getDirection(), Sprites::SnakeHead));
 
             // Draws snake body
             const auto &body = _snake->body();
 
             //// Draws first part of body
-            const auto &sprite = getBodyDir(headPos - body[0], body[0] - body[1]);
+            const auto &bodyDir = getBodyDir(headPos - body[0], body[0] - body[1]);
             painter.drawPixmap(getTileRect(body[0] * _tileSize + _offset, _tileSize),
-                               getSprite(sprite, SnakeTiles::Body));
+                               Sprites::getSprite(bodyDir, Sprites::SnakeBody));
 
             //// Draws rest parts
             for (size_t i = 1; i < body.size() - 1; ++i)
             {
-                const auto &sprite = getBodyDir(body[i - 1] - body[i], body[i] - body[i + 1]);
+                const auto &bodyDir = getBodyDir(body[i - 1] - body[i], body[i] - body[i + 1]);
                 painter.drawPixmap(getTileRect(body[i] * _tileSize + _offset, _tileSize),
-                                   getSprite(sprite, SnakeTiles::Body));
+                                   Sprites::getSprite(bodyDir, Sprites::SnakeBody));
             }
 
             // Draws snake tail
             painter.drawPixmap(getTileRect(body.back() * _tileSize + _offset, _tileSize),
-                               getSprite(vectorToDir(body.back() - body[body.size() - 2]), SnakeTiles::Tail));
+                               Sprites::getSprite(vectorToDir(body.back() - body[body.size() - 2]),
+                                                  Sprites::SnakeTail));
 
             painter.end();
         }
 
-        /// @brief Draws tiles for grid and caches to QPixmap
-        /// @param rect Size of the field
-        inline void paintField()
+        /// @brief Draws tiles for grid
+        /// @param painter Where to draw
+        /// @param event Gets rect of the area
+        inline void paintField(QPainter& painter, QPaintEvent *event)
         {
-            _cachedGrid = QPixmap(rect().size());
-            _cachedGrid.fill(Palette::background);
+            painter.save();
 
-            QPainter painter;
-            painter.begin(&_cachedGrid);
+            const auto rect = event->rect();
 
-            uint32_t x = _offset.x();
-            uint32_t y = _offset.y();
-            uint32_t step = 0;
+            painter.fillRect(rect, Palette::background);
 
-            for (uint32_t i = 0; i < _rows; ++i)
+            _tileSize = std::min(rect.width() / _cols, rect.height() / _rows);
+            _offset = QVector2D((rect.width() - _tileSize * _cols) / 2,
+                                (rect.height() - _tileSize * _rows) / 2);
+
+            int32_t x = _offset.x();
+            int32_t y = _offset.y();
+            int32_t tile = 0;
+
+            for (int32_t i = 0; i < _rows; ++i)
             {
-                for (uint32_t j = 0; j < _cols; ++j)
+                for (int32_t j = 0; j < _cols; ++j)
                 {
                     painter.fillRect(x, y, _tileSize, _tileSize,
-                                     step % 2 ? Palette::tileGreen : Palette::tileYellow);
+                                     tile % 2 ? Palette::tileGreen : Palette::tileYellow);
 
                     x += _tileSize;
-                    ++step;
+                    ++tile;
                 }
 
                 x = _offset.x();
                 y += _tileSize;
-                ++step;
+                ++tile;
             }
 
-            painter.end();
+            painter.restore();
         }
 
         /// @brief Gets position and size and creates QRect
         /// @param point Position to start draw a tile
         /// @param size Size of one tile
         /// @return QRect for one tile
-        constexpr QRect getTileRect(QVector2D point, uint32_t size) const noexcept
+        constexpr QRect getTileRect(QVector2D point, int32_t size) const noexcept
         {
             return QRect(point.toPoint(), QSize(size, size));
-        }
-
-        /// @brief 
-        /// @param dir 
-        /// @param part 
-        /// @return 
-        inline const QPixmap &getSprite(Direction dir, SnakeTiles part) const
-        {
-            static const QPixmap empty;
-
-            static const QPixmap apple("://resources/apple.png");
-
-            static const QPixmap headUp("://resources/head_up.png");
-            static const QPixmap headRight("://resources/head_right.png");
-            static const QPixmap headDown("://resources/head_down.png");
-            static const QPixmap headLeft("://resources/head_left.png");
-
-            static const QPixmap bodyHorizontal("://resources/body_horizontal.png");
-            static const QPixmap bodyVertical("://resources/body_vertical.png");
-            static const QPixmap bodyBottomLeft("://resources/body_bottomleft.png");
-            static const QPixmap bodyBottomRight("://resources/body_bottomright.png");
-            static const QPixmap bodyTopLeft("://resources/body_topleft.png");
-            static const QPixmap bodyTopRight("://resources/body_topright.png");
-
-            static const QPixmap tailEndUp("://resources/tail_up.png");
-            static const QPixmap tailEndRight("://resources/tail_right.png");
-            static const QPixmap tailEndDown("://resources/tail_down.png");
-            static const QPixmap tailEndLeft("://resources/tail_left.png");
-
-            if (part == SnakeTiles::Apple)
-            {
-                return apple;
-            }
-            else if (part == SnakeTiles::Head)
-            {
-                if (dir == Direction::Up)
-                    return headUp;
-                else if (dir == Direction::Right)
-                    return headRight;
-                else if (dir == Direction::Down)
-                    return headDown;
-                else if (dir == Direction::Left)
-                    return headLeft;
-            }
-            else if (part == SnakeTiles::Body)
-            {
-                if (dir == Direction::Vertical)
-                    return bodyVertical;
-                else if (dir == Direction::Horizontal)
-                    return bodyHorizontal;
-                else if (dir == Direction::DownLeft)
-                    return bodyBottomLeft;
-                else if (dir == Direction::DownRight)
-                    return bodyBottomRight;
-                else if (dir == Direction::LeftUp)
-                    return bodyTopRight;
-                else if (dir == Direction::RightUp)
-                    return bodyTopLeft;
-            }
-            else if (part == SnakeTiles::Tail)
-            {
-                if (dir == Direction::Up)
-                    return tailEndUp;
-                else if (dir == Direction::Right)
-                    return tailEndRight;
-                else if (dir == Direction::Down)
-                    return tailEndDown;
-                else if (dir == Direction::Left)
-                    return tailEndLeft;
-            }
-
-            return empty;
         }
 
         /// @brief 
@@ -248,13 +163,11 @@ namespace UI
         const Snake *_snake;
         const struct Apple *_apple;
 
-        uint32_t _tileSize = 1;
+        int32_t _tileSize = 1;
         QVector2D _offset;
 
-        QPixmap _cachedGrid;
-
-        const uint32_t _cols;
-        const uint32_t _rows;
+        const int32_t _cols;
+        const int32_t _rows;
     };
 
 } // namespane UI

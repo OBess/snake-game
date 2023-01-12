@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QVBoxLayout>
 
+#include "direction.h"
 #include "palette.h"
 #include "snake.h"
 #include "snake_field.h"

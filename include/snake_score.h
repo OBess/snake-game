@@ -6,15 +6,10 @@
 #include <QPainter>
 
 #include "palette.h"
+#include "sprites.h"
 
 namespace UI
 {
-    enum Score
-    {
-        Best,
-        Goal
-    };
-
     class SnakeScore : public QOpenGLWidget
     {
         Q_OBJECT
@@ -57,32 +52,18 @@ namespace UI
             painter.setFont(QFont("Arial", 20, QFont::DemiBold));
 
             //// Draws best score
-            painter.drawPixmap(QRect(0, 0, 50, 50), getSprite(Score::Best));
+            painter.drawPixmap(QRect(0, 0, 50, 50), Sprites::getSprite(Sprites::Cup));
 
             painter.setPen(Palette::cup);
             painter.drawText(QRect(52, 0, 60, 50), Qt::AlignVCenter, bestScore);
 
             //// Draws current score
-            painter.drawPixmap(QRect(115, 0, 50, 50), getSprite(Score::Goal));
+            painter.drawPixmap(QRect(115, 0, 50, 50), Sprites::getSprite(Sprites::Goal));
 
             painter.setPen(Qt::white);
             painter.drawText(QRect(167, 0, 60, 50), Qt::AlignVCenter, curScore);
 
             painter.end();
-        }
-
-        inline const QPixmap& getSprite(Score type)
-        {
-            static const QPixmap empty;
-            static const QPixmap cup("://resources/cup.png");
-            static const QPixmap goal("://resources/goal.png");
-
-            if (type == Score::Best)
-                return cup;
-            else if (type == Score::Goal)
-                return goal;
-
-            return empty;
         }
 
     private:
