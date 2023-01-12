@@ -66,8 +66,8 @@ void SnakeGame::setupUI()
     vLayout->addWidget(snakeScore);
 
     // Creates the snake field widget
-    auto snakeField = new UI::SnakeField({_snake, _apple, 28, 14}, this);
-    vLayout->addWidget(snakeField);
+    _field = new UI::SnakeField({_snake, _apple, 28, 14}, this);
+    vLayout->addWidget(_field);
 
     // Sets the layout
     setLayout(vLayout);
