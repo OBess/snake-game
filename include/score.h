@@ -21,8 +21,8 @@ public:
         return _currentScore;
     }
 
-    /// @brief Increments the current score by one and the best score
-    /// if the current is bigger than the best score
+    /// @brief Increments the current score by one and 
+    /// updates the best score if the current is bigger than the best score
     constexpr void incrementScore() noexcept
     {
         ++_currentScore;
