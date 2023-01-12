@@ -13,17 +13,7 @@ public:
     Snake(Direction direction, QVector2D headPosition)
         : _direction{direction}, _headPosition{headPosition}
     {
-        const QVector2D opositeDir = dirToVector(direction) * -1;
-
-        _body.reserve(_initTaleSize * 10);
-        _body.resize(_initTaleSize);
-
-        _body[0] = _headPosition + opositeDir;
-
-        for (size_t i = 1; i < _body.size(); ++i)
-        {
-            _body[i] = _body[i - 1] + opositeDir;
-        }
+        init();
     }
 
     ~Snake() = default;
@@ -65,6 +55,22 @@ public:
     constexpr const std::vector<QVector2D> &body() const noexcept
     {
         return _body;
+    }
+
+private:
+    inline void init()
+    {
+        const QVector2D opositeDir = dirToVector(_direction) * -1;
+
+        _body.reserve(_initTaleSize * 10);
+        _body.resize(_initTaleSize);
+
+        _body[0] = _headPosition + opositeDir;
+
+        for (size_t i = 1; i < _body.size(); ++i)
+        {
+            _body[i] = _body[i - 1] + opositeDir;
+        }
     }
 
 private:
