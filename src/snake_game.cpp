@@ -1,10 +1,13 @@
 #include "snake_game.h"
 
+#include <QScreen>
+#include <QSettings>
 #include <QVBoxLayout>
 
 #include "direction.h"
 #include "game_logic.h"
 #include "palette.h"
+#include "settings.h"
 #include "snake_field.h"
 #include "snake_score.h"
 
@@ -14,6 +17,7 @@ SnakeGame::SnakeGame(QWidget *parent)
     _gameLogic = new GameLogic({28, 14}, 0);
 
     setupUI();
+    setup();
 
     _timerId = startTimer(150);
 }
@@ -21,6 +25,8 @@ SnakeGame::SnakeGame(QWidget *parent)
 SnakeGame::~SnakeGame()
 {
     killTimer(_timerId);
+
+    save();
 
     delete _gameLogic;
 }
@@ -89,6 +95,82 @@ void SnakeGame::setupUI()
 
     // Sets the layout
     setLayout(vLayout);
+}
+
+void SnakeGame::setup()
+{
+    QSettings settings(Settings::Ini::FILE_PATH, QSettings::IniFormat);
+
+#ifndef Q_OS_ANDROID
+    settings.beginGroup(Settings::Ini::MAIN_WINDOW);
+
+    if (settings.value(Settings::Ini::IS_MAXIMIZED, false).toBool())
+    {
+        showMaximized();
+    }
+    else
+    {
+        resize(settings.value(Settings::Ini::WIDTH, 640).toInt(),
+               settings.value(Settings::Ini::HEIGHT, 480).toInt());
+
+        // Keep the application in the screen area
+        const QSize screenSize = screen()->size();
+
+        int pos_x = settings.value(Settings::Ini::POS_X, 0).toInt();
+        int pos_y = settings.value(Settings::Ini::POS_Y, 0).toInt();
+
+        if (pos_x + width() > screenSize.width())
+        {
+            pos_x = screenSize.width() - width();
+        }
+        else if (pos_x < 0)
+        {
+            pos_x = 0;
+        }
+
+        if (pos_y + height() > screenSize.height())
+        {
+            pos_y = screenSize.height() - height();
+        }
+        else if (pos_y < 0)
+        {
+            pos_y = 0;
+        }
+
+        move(pos_x, pos_y);
+    }
+
+    settings.endGroup();
+#endif // Q_OS_ANDROID
+
+    // Reades best score
+    settings.beginGroup(Settings::Ini::GAME);
+
+    const int bestScore = settings.value(Settings::Ini::BEST, 0).toInt();
+    _gameLogic->score()->setBestScore(bestScore);
+
+    settings.endGroup();
+}
+
+void SnakeGame::save()
+{
+    QSettings settings(Settings::Ini::FILE_PATH, QSettings::IniFormat);
+
+#ifndef Q_OS_ANDROID
+    settings.beginGroup(Settings::Ini::MAIN_WINDOW);
+
+    settings.setValue(Settings::Ini::IS_MAXIMIZED, isMaximized());
+    settings.setValue(Settings::Ini::WIDTH, width());
+    settings.setValue(Settings::Ini::HEIGHT, height());
+    settings.setValue(Settings::Ini::POS_X, pos().x());
+    settings.setValue(Settings::Ini::POS_Y, pos().y() - 38); // 38 it is the height of title bar
+
+    settings.endGroup();
+#endif // Q_OS_ANDROID
+
+    settings.beginGroup(Settings::Ini::GAME);
+    settings.setValue(Settings::Ini::BEST, QString::number(_gameLogic->score()->bestScore()));
+    settings.endGroup();
 }
 
 void SnakeGame::restart()

@@ -27,6 +27,10 @@ private:
 
     void setupUI();
 
+    void setup();
+
+    void save();
+
     void restart();
 
     UI::SnakeField *_field = nullptr;

@@ -121,6 +121,11 @@ public:
         return _score;
     }
 
+    constexpr Score* score() noexcept
+    {
+        return _score;
+    }
+
     constexpr const Snake* snake() const noexcept
     {
         return _snake;
