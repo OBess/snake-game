@@ -7,6 +7,7 @@
 
 #include "apple.h"
 #include "direction.h"
+#include "game_logic.h"
 #include "palette.h"
 #include "snake.h"
 #include "sprites.h"
@@ -33,11 +34,31 @@ namespace UI
             setMinimumSize(970, 500);
         }
 
+        constexpr void setState(GameLogic::GameState state) noexcept
+        {
+            _state = state;
+        }
+
+        constexpr void setApple(const Apple* apple) noexcept
+        {
+            _apple = apple;
+        }
+
+        constexpr void setSnake(const Snake* snake) noexcept
+        {
+            _snake = snake;
+        }
+
     private:
         void paintEvent(QPaintEvent *event) override
         {
             QPainter painter;
             painter.begin(this);
+
+            // Calculates
+            _tileSize = std::min(event->rect().width() / _cols, event->rect().height() / _rows);
+            _offset = QVector2D((event->rect().width() - _tileSize * _cols) / 2,
+                                (event->rect().height() - _tileSize * _rows) / 2);
 
             // Draws tiles for field
             paintField(painter, event);
@@ -72,6 +93,13 @@ namespace UI
                                Sprites::getSprite(vectorToDir(body.back() - body[body.size() - 2]),
                                                   Sprites::SnakeTail));
 
+            // Draws menu
+            if (_state == GameLogic::GameState::Pause ||
+                _state == GameLogic::GameState::GameOver)
+            {
+                paintMenu(painter, event);
+            }
+
             painter.end();
         }
 
@@ -82,13 +110,7 @@ namespace UI
         {
             painter.save();
 
-            const auto rect = event->rect();
-
-            painter.fillRect(rect, Palette::background);
-
-            _tileSize = std::min(rect.width() / _cols, rect.height() / _rows);
-            _offset = QVector2D((rect.width() - _tileSize * _cols) / 2,
-                                (rect.height() - _tileSize * _rows) / 2);
+            painter.fillRect(event->rect(), Palette::background);
 
             int32_t x = _offset.x();
             int32_t y = _offset.y();
@@ -109,6 +131,33 @@ namespace UI
                 y += _tileSize;
                 ++tile;
             }
+
+            painter.restore();
+        }
+
+        inline void paintMenu(QPainter &painter, QPaintEvent *event)
+        {
+            painter.save();
+
+            // Calculates
+            const QRect& rect = event->rect();
+
+            const int32_t width = rect.width() * 0.5;
+            const int32_t height = rect.height() * 0.5;
+            const int32_t x = (rect.width() / 2) - (width / 2);
+            const int32_t y = (rect.height() / 2) - (height / 2);
+
+            static const QPen pen(Palette::tileYellow, 10);
+
+            // Draws rounded rect
+            painter.setPen(pen);
+            painter.setBrush(Palette::tileGreen);
+            painter.drawRoundedRect(x, y, width, height, 30, 30);
+
+            // Draws icon
+
+
+            // Draws text
 
             painter.restore();
         }
@@ -160,8 +209,10 @@ namespace UI
         const Snake *_snake;
         const struct Apple *_apple;
 
-        int32_t _tileSize = 1;
+        int32_t _tileSize;
         QVector2D _offset;
+
+        GameLogic::GameState _state{GameLogic::GameState::Pause};
 
         const int32_t _cols;
         const int32_t _rows;
