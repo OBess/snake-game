@@ -3,50 +3,58 @@
 #include <QVBoxLayout>
 
 #include "direction.h"
+#include "game_logic.h"
 #include "palette.h"
-#include "score.h"
-#include "snake.h"
 #include "snake_field.h"
 #include "snake_score.h"
 
 SnakeGame::SnakeGame(QWidget *parent)
     : QWidget(parent)
 {
-    _snake = new Snake(Direction::Up, {0, 0});
-    _apple = new Apple({5, 5});
-    _score = new Score(5);
+    _gameLogic = new GameLogic({28, 14}, 0);
 
     setupUI();
+
+    _timerId = startTimer(200);
 }
 
 SnakeGame::~SnakeGame()
 {
-    delete _snake;
-    delete _apple;
-    delete _score;
+    killTimer(_timerId);
+
+    delete _gameLogic;
 }
 
 void SnakeGame::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
     {
-        _snake->setDirection(Direction::Up);
+        _gameLogic->setDirection(Direction::Up);
     }
     else if (event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
     {
-        _snake->setDirection(Direction::Right);
+        _gameLogic->setDirection(Direction::Right);
     }
     else if (event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
     {
-        _snake->setDirection(Direction::Down);
+        _gameLogic->setDirection(Direction::Down);
     }
     else if (event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
     {
-        _snake->setDirection(Direction::Left);
+        _gameLogic->setDirection(Direction::Left);
     }
+    // TODO: Delete this branch
+    else if (event->key() == Qt::Key_Space)
+    {
+        _gameLogic->start();
+    }
+}
 
-    _snake->move();
+void SnakeGame::timerEvent(QTimerEvent *event)
+{
+    _gameLogic->update();
     _field->update();
+    _score->update();
 }
 
 void SnakeGame::setupUI()
@@ -61,11 +69,14 @@ void SnakeGame::setupUI()
     QVBoxLayout *vLayout = new QVBoxLayout(this);
 
     // Creates the snake score widget
-    auto snakeScore = new UI::SnakeScore(_score, this);
-    vLayout->addWidget(snakeScore);
+    _score = new UI::SnakeScore(_gameLogic->score(), this);
+    vLayout->addWidget(_score);
 
     // Creates the snake field widget
-    _field = new UI::SnakeField({_snake, _apple, 28, 14}, this);
+    const auto area = _gameLogic->area();
+
+    _field = new UI::SnakeField({_gameLogic->snake(), _gameLogic->apple(),
+                                 area.width(), area.height()}, this);
     vLayout->addWidget(_field);
 
     // Sets the layout

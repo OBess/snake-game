@@ -7,11 +7,10 @@ namespace UI
 {
 
     class SnakeField;
+    class SnakeScore;
 
 } // namespace UI
-class Snake;
-struct Apple;
-class Score;
+class GameLogic;
 
 class SnakeGame : public QWidget
 {
@@ -24,11 +23,14 @@ public:
 private:
     void keyPressEvent(QKeyEvent *event) override;
 
+    void timerEvent(QTimerEvent *event) override;
+
     void setupUI();
 
     UI::SnakeField *_field = nullptr;
-    Snake *_snake = nullptr;
-    Apple *_apple = nullptr;
-    Score *_score = nullptr;
+    UI::SnakeScore *_score = nullptr;
+    GameLogic *_gameLogic = nullptr;
+
+    int _timerId;
 };
 #endif // SNAKE_GAME_H
