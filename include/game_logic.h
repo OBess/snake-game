@@ -1,6 +1,8 @@
 #ifndef GAME_LOGIC_H
 #define GAME_LOGIC_H
 
+#include <random>
+
 #include <QSize>
 #include <QVector2D>
 
@@ -13,7 +15,7 @@ class GameLogic
 private:
     enum class CollisionType : uint8_t
     {
-        Invalid = 0,
+        Nothing = 0,
 
         Apple,
         Body,
@@ -22,11 +24,11 @@ private:
 
 public:
     GameLogic(QSize area, uint32_t bestScore)
-        : _area(area), _gameGoesOn(false)
+        : _area(area), _gameGoesOn(false), _gen(_rd())
     {
+        _snake = new Snake(Direction::Up, QVector2D(_area.width() / 2, _area.height() / 2));
         _apple = new Apple(randomApplePos());
         _score = new Score(bestScore);
-        _snake = new Snake(Direction::Up, QVector2D(_area.width() / 2, _area.height() / 2));
     }
 
     ~GameLogic()
@@ -132,20 +134,47 @@ private:
         }
 
         // Checks body collision
-        for (const auto& part : _snake->body())
+        if (checkBodyCollision(headPos))
         {
-            if (headPos == part)
-            {
-                return CollisionType::Body;
-            }
+            return CollisionType::Body;
         }
 
         return {};
     }
 
+    constexpr bool checkBodyCollision(QVector2D pos) const noexcept
+    {
+        for (const auto& part : _snake->body())
+        {
+            if (pos == part)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    constexpr bool checkAppleCollision(QVector2D pos) const noexcept
+    {
+        return pos == _snake->headPos() || checkBodyCollision(pos);
+    }
+
     inline QVector2D randomApplePos() noexcept
     {
-        return {};
+        std::uniform_int_distribution distribX(0, _area.width() - 1);
+        std::uniform_int_distribution distribY(0, _area.height() - 1);
+
+        QVector2D newPos(0, 0);
+
+        do
+        {
+            newPos.setX(distribX(_gen));
+            newPos.setY(distribY(_gen));
+
+        } while(checkAppleCollision(newPos));
+
+        return newPos;
     }
 
 private:
@@ -155,6 +184,9 @@ private:
 
     QSize _area;
     bool _gameGoesOn = false;
+
+    std::random_device _rd;
+    std::mt19937 _gen;
 };
 
 #endif // GAME_LOGIC_H
