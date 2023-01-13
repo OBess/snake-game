@@ -154,10 +154,49 @@ namespace UI
             painter.setBrush(Palette::tileGreen);
             painter.drawRoundedRect(x, y, width, height, 30, 30);
 
-            // Draws icon
+            // Draws icon and text
+            //// Calculates
+            const int32_t imageSize = height / 3;
+            const int32_t imageX = x + width / 5 - imageSize / 2;
+            const int32_t imageY = y + imageSize / 2;
 
+            const int32_t textSize = width / 14;
+            const int32_t textX = imageX + imageSize + textSize / 3;
+            const int32_t textY = imageY + imageSize / 2 + textSize / 2;
 
-            // Draws text
+            const int32_t infoTextSize = textSize / 3;
+            const int32_t infoTextX = imageX;
+            const int32_t infoTextY = imageY + imageSize + infoTextSize * 2;
+
+            //// Draws
+            if (_state == GameLogic::GameState::Pause)
+            {
+                painter.setFont(QFont("Arial", textSize, QFont::DemiBold));
+                painter.setPen(Palette::iconText);
+
+                painter.drawPixmap(imageX, imageY, imageSize, imageSize, Sprites::getSprite(Sprites::Icon));
+                painter.drawText(textX, textY, "Welcom");
+
+                painter.setFont(QFont("Arial", infoTextSize, QFont::DemiBold));
+                painter.setPen(Palette::infoText);
+
+                painter.drawText(infoTextX, infoTextY, "Space to start game");
+                painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Arrows or AWSD to move");
+            }
+            else if (_state == GameLogic::GameState::GameOver)
+            {
+                painter.setFont(QFont("Arial", textSize, QFont::DemiBold));
+                painter.setPen(Palette::redCrossText);
+
+                painter.drawPixmap(imageX, imageY, imageSize, imageSize, Sprites::getSprite(Sprites::RedCross));
+                painter.drawText(textX, textY, "Game Over");
+
+                painter.setFont(QFont("Arial", infoTextSize, QFont::DemiBold));
+                painter.setPen(Palette::infoText);
+
+                painter.drawText(infoTextX, infoTextY, "Space to restart game");
+                painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Arrows or AWSD to move");
+            }
 
             painter.restore();
         }
