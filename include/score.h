@@ -31,6 +31,11 @@ public:
             _bestScore = _currentScore;
     }
 
+    constexpr void clearCurrentScore() noexcept
+    {
+        _currentScore = 0;
+    }
+
 private:
     uint32_t _bestScore;
     uint32_t _currentScore;
