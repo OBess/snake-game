@@ -30,6 +30,9 @@ public:
 
         // Moves head
         _headPosition += dirToVector(_direction);
+
+        // Sets to allow next set direction
+        _canSetDir = true;
     }
 
     constexpr void addTailPart()
@@ -44,7 +47,11 @@ public:
 
     constexpr void setDirection(Direction direction) noexcept
     {
-        _direction = direction;
+        if(_canSetDir)
+        {
+            _direction = direction;
+            _canSetDir = false;
+        }
     }
 
     constexpr QVector2D headPos() const noexcept
@@ -80,6 +87,8 @@ private:
 
     const uint8_t _initTaleSize = 5;
     std::vector<QVector2D> _body;
+
+    bool _canSetDir = true;
 };
 
 #endif // SNAKE_H
