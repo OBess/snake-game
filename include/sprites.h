@@ -22,7 +22,10 @@ namespace UI
             SnakeTail,
 
             Cup,
-            Goal
+            Goal,
+
+            Icon,
+            RedCross
         };
 
         /// @brief Returns a loaded sprite corresponding to the direction and type of sprite
@@ -55,6 +58,9 @@ namespace UI
 
             static const QPixmap cup("://resources/cup.png");
             static const QPixmap goal("://resources/goal.png");
+
+            static const QPixmap icon("://resources/icon.png");
+            static const QPixmap redCross("://resources/red_cross.png");
 
             if (type == Type::Apple)
             {
@@ -98,9 +104,22 @@ namespace UI
                     return tailEndLeft;
             }
             else if (type == Type::Cup)
+            {
                 return cup;
+            }
             else if (type == Type::Goal)
+            {
                 return goal;
+            }
+            else if (type == Type::Icon)
+            {
+                return icon;
+            }
+            else if (type == Type::RedCross)
+            {
+                return redCross;
+            }
+
 
             return empty;
         }

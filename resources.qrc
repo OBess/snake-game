@@ -17,5 +17,7 @@
         <file>resources/tail_up.png</file>
         <file>resources/cup.png</file>
         <file>resources/goal.png</file>
+        <file>resources/icon.png</file>
+        <file>resources/red_cross.png</file>
     </qresource>
 </RCC>
