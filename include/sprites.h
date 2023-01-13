@@ -37,30 +37,30 @@ namespace UI
             // Invalid type
             static const QPixmap empty;
 
-            static const QPixmap apple("://resources/apple.png");
+            static const QPixmap apple("://resources/images/apple.png");
 
-            static const QPixmap headUp("://resources/head_up.png");
-            static const QPixmap headRight("://resources/head_right.png");
-            static const QPixmap headDown("://resources/head_down.png");
-            static const QPixmap headLeft("://resources/head_left.png");
+            static const QPixmap headUp("://resources/images/head_up.png");
+            static const QPixmap headRight("://resources/images/head_right.png");
+            static const QPixmap headDown("://resources/images/head_down.png");
+            static const QPixmap headLeft("://resources/images/head_left.png");
 
-            static const QPixmap bodyHorizontal("://resources/body_horizontal.png");
-            static const QPixmap bodyVertical("://resources/body_vertical.png");
-            static const QPixmap bodyBottomLeft("://resources/body_bottomleft.png");
-            static const QPixmap bodyBottomRight("://resources/body_bottomright.png");
-            static const QPixmap bodyTopLeft("://resources/body_topleft.png");
-            static const QPixmap bodyTopRight("://resources/body_topright.png");
+            static const QPixmap bodyHorizontal("://resources/images/body_horizontal.png");
+            static const QPixmap bodyVertical("://resources/images/body_vertical.png");
+            static const QPixmap bodyBottomLeft("://resources/images/body_bottomleft.png");
+            static const QPixmap bodyBottomRight("://resources/images/body_bottomright.png");
+            static const QPixmap bodyTopLeft("://resources/images/body_topleft.png");
+            static const QPixmap bodyTopRight("://resources/images/body_topright.png");
 
-            static const QPixmap tailEndUp("://resources/tail_up.png");
-            static const QPixmap tailEndRight("://resources/tail_right.png");
-            static const QPixmap tailEndDown("://resources/tail_down.png");
-            static const QPixmap tailEndLeft("://resources/tail_left.png");
+            static const QPixmap tailEndUp("://resources/images/tail_up.png");
+            static const QPixmap tailEndRight("://resources/images/tail_right.png");
+            static const QPixmap tailEndDown("://resources/images/tail_down.png");
+            static const QPixmap tailEndLeft("://resources/images/tail_left.png");
 
-            static const QPixmap cup("://resources/cup.png");
-            static const QPixmap goal("://resources/goal.png");
+            static const QPixmap cup("://resources/images/cup.png");
+            static const QPixmap goal("://resources/images/goal.png");
 
-            static const QPixmap icon("://resources/icon.png");
-            static const QPixmap redCross("://resources/red_cross.png");
+            static const QPixmap icon("://resources/images/icon.png");
+            static const QPixmap redCross("://resources/images/red_cross.png");
 
             if (type == Type::Apple)
             {
