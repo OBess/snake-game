@@ -23,11 +23,18 @@ private:
     };
 
 public:
+    enum class GameState : uint8_t
+    {
+        Play,
+        Pause,
+        GameOver
+    };
+
     GameLogic(QSize area, uint32_t bestScore)
-        : _area(area), _gameGoesOn(false), _gen(_rd())
+        : _area(area), _gen(_rd())
     {
         _snake = new Snake(Direction::Up, QVector2D(_area.width() / 2, _area.height() / 2));
-        _apple = new Apple(randomApplePos());
+        _apple = new Apple(_snake->headPos());
         _score = new Score(bestScore);
     }
 
@@ -40,12 +47,12 @@ public:
 
     void start()
     {
-        _gameGoesOn = true;
+        _gameState = GameState::Play;
     }
 
     void update()
     {
-        if (_gameGoesOn == false)
+        if (_gameState == GameState::Pause || _gameState == GameState::GameOver)
             return;
 
         _snake->move();
@@ -61,18 +68,24 @@ public:
         else if (collisionType == CollisionType::Body ||
                  collisionType == CollisionType::Wall)
         {
-            _gameGoesOn = false;
+            _gameState = GameState::GameOver;
         }
     }
 
-    void restart()
+    inline void restart()
     {
         delete _snake;
         _snake = new Snake(Direction::Up, QVector2D(_area.width() / 2, _area.height() / 2));
 
         _apple->position = randomApplePos();
+        _score->clearCurrentScore();
 
-        _gameGoesOn = true;
+        _gameState = GameState::Play;
+    }
+
+    constexpr GameState gameState() const noexcept
+    {
+        return _gameState;
     }
 
     constexpr void setDirection(Direction dir) noexcept
@@ -95,7 +108,7 @@ public:
 
     constexpr bool doesGameGoOn() const noexcept
     {
-        return _gameGoesOn;
+        return _gameState == GameState::Play;
     }
 
     constexpr const Apple* apple() const noexcept
@@ -183,7 +196,7 @@ private:
     Snake* _snake = nullptr;
 
     QSize _area;
-    bool _gameGoesOn = false;
+    GameState _gameState = GameState::Pause;
 
     std::random_device _rd;
     std::mt19937 _gen;
