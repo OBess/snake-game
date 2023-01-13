@@ -15,7 +15,7 @@ SnakeGame::SnakeGame(QWidget *parent)
 
     setupUI();
 
-    _timerId = startTimer(200);
+    _timerId = startTimer(150);
 }
 
 SnakeGame::~SnakeGame()
