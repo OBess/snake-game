@@ -45,12 +45,17 @@ public:
         delete _snake;
     }
 
-    void start()
+    constexpr void start() noexcept
     {
         _gameState = GameState::Play;
     }
 
-    void update()
+    constexpr void play() noexcept
+    {
+        _gameState = GameState::Play;
+    }
+
+    constexpr void update()
     {
         if (_gameState == GameState::Pause || _gameState == GameState::GameOver)
             return;
@@ -81,6 +86,11 @@ public:
         _score->clearCurrentScore();
 
         _gameState = GameState::Play;
+    }
+
+    constexpr void pause() noexcept
+    {
+        _gameState = GameState::Pause;
     }
 
     constexpr GameState gameState() const noexcept

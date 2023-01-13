@@ -2,6 +2,7 @@
 
 #include <QScreen>
 #include <QSettings>
+#include <QVector2D>
 #include <QVBoxLayout>
 
 #include "direction.h"
@@ -31,8 +32,41 @@ SnakeGame::~SnakeGame()
     delete _gameLogic;
 }
 
+void SnakeGame::onAppStateEvent(Qt::ApplicationState state)
+{
+#ifdef Q_OS_ANDROID
+
+    static bool paused = false;
+
+    // When user hide application on android OS
+    if (state == Qt::ApplicationInactive ||
+        state == Qt::ApplicationSuspended ||
+        state == Qt::ApplicationHidden)
+    {
+        save();
+
+        if (_gameLogic->doesGameGoOn())
+        {
+            _gameLogic->pause();
+            paused = true;
+        }
+    }
+    else if (state == Qt::ApplicationActive)
+    {
+        if (paused)
+        {
+            _gameLogic->play();
+            paused = false;
+        }
+    }
+
+#endif // Q_OS_ANDROID
+}
+
+
 void SnakeGame::keyPressEvent(QKeyEvent *event)
 {
+#ifndef Q_OS_ANDROID
     if (_gameLogic->doesGameGoOn())
     {
         if (event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
@@ -60,6 +94,57 @@ void SnakeGame::keyPressEvent(QKeyEvent *event)
     {
         restart();
     }
+#endif // Q_OS_ANDROID
+}
+
+void SnakeGame::mousePressEvent(QMouseEvent *event)
+{
+#ifdef Q_OS_ANDROID
+    if (_gameLogic->doesGameGoOn() == false)
+    {
+        restart();
+    }
+
+    fingerLastPos = event->pos();
+#endif // Q_OS_ANDROID
+}
+
+void SnakeGame::mouseMoveEvent(QMouseEvent *event)
+{
+#ifdef Q_OS_ANDROID
+    static const float lengthToMove = 5;
+
+    if (_gameLogic->doesGameGoOn())
+    {
+        QVector2D vector(event->pos() - fingerLastPos);
+
+        if (vector.length() > lengthToMove)
+        {
+            vector.normalize();
+
+            //
+            auto closeX = 1 - std::abs(vector.x());
+            auto closeY = 1 - std::abs(vector.y());
+
+            //
+            if (closeX < closeY)
+            {
+                closeX = 1 * (vector.x() < 0 ? -1 : 1);
+                closeY = 0;
+            }
+            else
+            {
+                closeX = 0;
+                closeY = 1 * (vector.y() < 0 ? -1 : 1);
+            }
+
+            _gameLogic->setDirection(vectorToDir({closeX, closeY}));
+        }
+
+        //
+        fingerLastPos = event->pos();
+    }
+#endif // Q_OS_ANDROID
 }
 
 void SnakeGame::timerEvent(QTimerEvent *event)

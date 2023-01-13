@@ -22,13 +22,13 @@ namespace UI
         int32_t rols;
     };
 
-    class SnakeField : public QOpenGLWidget
+    class SnakeField : public QWidget
     {
         Q_OBJECT
 
     public:
         explicit SnakeField(SnakeFieldArgs args, QWidget *parent = nullptr)
-            : QOpenGLWidget{parent}, _snake{args.snake}, _apple{args.apple},
+            : QWidget{parent}, _snake{args.snake}, _apple{args.apple},
               _cols(args.cols), _rows(args.rols)
         {
             setMinimumSize(970, 500);
@@ -164,7 +164,7 @@ namespace UI
             const int32_t textX = imageX + imageSize + textSize / 3;
             const int32_t textY = imageY + imageSize / 2 + textSize / 2;
 
-            const int32_t infoTextSize = textSize / 3;
+            const int32_t infoTextSize = textSize / 3.5;
             const int32_t infoTextX = imageX;
             const int32_t infoTextY = imageY + imageSize + infoTextSize * 2;
 
@@ -175,13 +175,18 @@ namespace UI
                 painter.setPen(Palette::iconText);
 
                 painter.drawPixmap(imageX, imageY, imageSize, imageSize, Sprites::getSprite(Sprites::Icon));
-                painter.drawText(textX, textY, "Welcom");
+                painter.drawText(textX, textY, "Welcome");
 
                 painter.setFont(QFont("Arial", infoTextSize, QFont::DemiBold));
                 painter.setPen(Palette::infoText);
 
+#ifndef Q_OS_ANDROID
                 painter.drawText(infoTextX, infoTextY, "Space to start game");
                 painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Arrows or AWSD to move");
+#else // Q_OS_ANDROID
+                painter.drawText(infoTextX, infoTextY, "Touch to start game");
+                painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Move by fingers");
+#endif // Q_OS_ANDROID
             }
             else if (_state == GameLogic::GameState::GameOver)
             {
@@ -194,8 +199,13 @@ namespace UI
                 painter.setFont(QFont("Arial", infoTextSize, QFont::DemiBold));
                 painter.setPen(Palette::infoText);
 
+#ifndef Q_OS_ANDROID
                 painter.drawText(infoTextX, infoTextY, "Space to restart game");
                 painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Arrows or AWSD to move");
+#else // Q_OS_ANDROID
+                painter.drawText(infoTextX, infoTextY, "Touch to restart game");
+                painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Move by fingers");
+#endif // Q_OS_ANDROID
             }
 
             painter.restore();

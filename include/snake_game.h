@@ -20,8 +20,14 @@ public:
     SnakeGame(QWidget *parent = nullptr);
     ~SnakeGame();
 
+    void onAppStateEvent(Qt::ApplicationState state);
+
 private:
     void keyPressEvent(QKeyEvent *event) override;
+
+    void mousePressEvent(QMouseEvent *event) override;
+
+    void mouseMoveEvent(QMouseEvent *event) override;
 
     void timerEvent(QTimerEvent *event) override;
 
@@ -38,5 +44,7 @@ private:
     GameLogic *_gameLogic = nullptr;
 
     int _timerId;
+
+    QPoint fingerLastPos;
 };
 #endif // SNAKE_GAME_H
