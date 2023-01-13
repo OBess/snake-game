@@ -120,7 +120,6 @@ namespace UI
                 return redCross;
             }
 
-
             return empty;
         }
 
