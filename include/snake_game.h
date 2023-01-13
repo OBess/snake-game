@@ -27,6 +27,8 @@ private:
 
     void setupUI();
 
+    void restart();
+
     UI::SnakeField *_field = nullptr;
     UI::SnakeScore *_score = nullptr;
     GameLogic *_gameLogic = nullptr;

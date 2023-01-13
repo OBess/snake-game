@@ -27,34 +27,42 @@ SnakeGame::~SnakeGame()
 
 void SnakeGame::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
+    if (_gameLogic->doesGameGoOn())
     {
-        _gameLogic->setDirection(Direction::Up);
+        if (event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
+        {
+            _gameLogic->setDirection(Direction::Up);
+        }
+        else if (event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
+        {
+            _gameLogic->setDirection(Direction::Right);
+        }
+        else if (event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
+        {
+            _gameLogic->setDirection(Direction::Down);
+        }
+        else if (event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
+        {
+            _gameLogic->setDirection(Direction::Left);
+        }
+        else if (event->key() == Qt::Key_R)
+        {
+            restart();
+        }
     }
-    else if (event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
-    {
-        _gameLogic->setDirection(Direction::Right);
-    }
-    else if (event->key() == Qt::Key_S || event->key() == Qt::Key_Down)
-    {
-        _gameLogic->setDirection(Direction::Down);
-    }
-    else if (event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
-    {
-        _gameLogic->setDirection(Direction::Left);
-    }
-    // TODO: Delete this branch
     else if (event->key() == Qt::Key_Space)
     {
-        _gameLogic->start();
+        restart();
     }
 }
 
 void SnakeGame::timerEvent(QTimerEvent *event)
 {
     _gameLogic->update();
-    _field->update();
     _score->update();
+
+    _field->setState(_gameLogic->gameState());
+    _field->update();
 }
 
 void SnakeGame::setupUI()
@@ -81,4 +89,12 @@ void SnakeGame::setupUI()
 
     // Sets the layout
     setLayout(vLayout);
+}
+
+void SnakeGame::restart()
+{
+    _gameLogic->restart();
+
+    _field->setApple(_gameLogic->apple());
+    _field->setSnake(_gameLogic->snake());
 }
