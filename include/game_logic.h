@@ -168,7 +168,7 @@ private:
             return CollisionType::Body;
         }
 
-        return {};
+        return CollisionType::Nothing;
     }
 
     constexpr bool checkBodyCollision(QVector2D pos) const noexcept
@@ -184,7 +184,7 @@ private:
         return false;
     }
 
-    constexpr bool checkAppleCollision(QVector2D pos) const noexcept
+    constexpr bool freePlaceForApple(QVector2D pos) const noexcept
     {
         return pos == _snake->headPos() || checkBodyCollision(pos);
     }
@@ -201,7 +201,7 @@ private:
             newPos.setX(distribX(_gen));
             newPos.setY(distribY(_gen));
 
-        } while (checkAppleCollision(newPos));
+        } while (freePlaceForApple(newPos));
 
         return newPos;
     }
