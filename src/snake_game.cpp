@@ -243,7 +243,7 @@ void SnakeGame::setup(unsigned &bestScore, QSize &area)
     unsigned areaWidth = settings.value(Settings::Ini::AREA_WIDTH, 28).toUInt();
     unsigned areaHeight = settings.value(Settings::Ini::AREA_HEIGHT, 14).toUInt();
 
-    // Uses restrictins
+    // Uses restrictions
     const unsigned mimWidth = 10;
     const unsigned mimHeight = 5;
 
