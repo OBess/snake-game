@@ -15,10 +15,14 @@
 SnakeGame::SnakeGame(QWidget *parent)
     : QWidget(parent)
 {
-    _gameLogic = new GameLogic({28, 14}, 0);
+    // Reads saved data
+    unsigned bestScore = 0;
+    QSize area;
+    setup(bestScore, area);
+
+    _gameLogic = new GameLogic(area, bestScore);
 
     setupUI();
-    setup();
 
     _timerId = startTimer(150);
 }
@@ -182,11 +186,12 @@ void SnakeGame::setupUI()
     setLayout(vLayout);
 }
 
-void SnakeGame::setup()
+void SnakeGame::setup(unsigned &bestScore, QSize &area)
 {
     QSettings settings(Settings::Ini::FILE_PATH, QSettings::IniFormat);
 
 #ifndef Q_OS_ANDROID
+    // Reads window settings
     settings.beginGroup(Settings::Ini::MAIN_WINDOW);
 
     if (settings.value(Settings::Ini::IS_MAXIMIZED, false).toBool())
@@ -228,11 +233,27 @@ void SnakeGame::setup()
     settings.endGroup();
 #endif // Q_OS_ANDROID
 
-    // Reades best score
+    // Reades game settings
     settings.beginGroup(Settings::Ini::GAME);
 
-    const int bestScore = settings.value(Settings::Ini::BEST, 0).toInt();
-    _gameLogic->score()->setBestScore(bestScore);
+    //// Reads best score
+    bestScore = settings.value(Settings::Ini::BEST, 0).toUInt();
+
+    //// Reads area size
+    unsigned areaWidth = settings.value(Settings::Ini::AREA_WIDTH, 28).toUInt();
+    unsigned areaHeight = settings.value(Settings::Ini::AREA_HEIGHT, 14).toUInt();
+
+    // Uses restrictins
+    const unsigned mimWidth = 10;
+    const unsigned mimHeight = 5;
+
+    if (areaWidth < mimWidth)
+        areaWidth = mimWidth;
+
+    if (areaHeight < mimHeight)
+        areaHeight = mimHeight;
+
+    area = QSize(areaWidth, areaHeight);
 
     settings.endGroup();
 }
@@ -242,6 +263,7 @@ void SnakeGame::save()
     QSettings settings(Settings::Ini::FILE_PATH, QSettings::IniFormat);
 
 #ifndef Q_OS_ANDROID
+    // Saves window settings
     settings.beginGroup(Settings::Ini::MAIN_WINDOW);
 
     settings.setValue(Settings::Ini::IS_MAXIMIZED, isMaximized());
@@ -253,8 +275,13 @@ void SnakeGame::save()
     settings.endGroup();
 #endif // Q_OS_ANDROID
 
+    // Saves game settings
     settings.beginGroup(Settings::Ini::GAME);
+
     settings.setValue(Settings::Ini::BEST, QString::number(_gameLogic->score()->bestScore()));
+    settings.setValue(Settings::Ini::AREA_WIDTH, QString::number(_gameLogic->area().width()));
+    settings.setValue(Settings::Ini::AREA_HEIGHT, QString::number(_gameLogic->area().height()));
+
     settings.endGroup();
 }
 

@@ -33,7 +33,7 @@ private:
 
     void setupUI();
 
-    void setup();
+    void setup(unsigned &bestScore, QSize &area);
 
     void save();
 

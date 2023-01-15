@@ -17,6 +17,8 @@ namespace Settings
 
         [[maybe_unused]] inline const char *const GAME = "Game";
         [[maybe_unused]] inline const char *const BEST = "Best";
+        [[maybe_unused]] inline const char *const AREA_WIDTH = "AREA_WIDTH";
+        [[maybe_unused]] inline const char *const AREA_HEIGHT = "AREA_HEIGHT";
     } // namespace Ini
 
 } // namespace Settings

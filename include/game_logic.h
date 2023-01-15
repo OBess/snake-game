@@ -111,6 +111,11 @@ public:
         return _snake->getDirection();
     }
 
+    constexpr void setArea(QSize area) noexcept
+    {
+        _area = area;
+    }
+
     constexpr QSize area() const noexcept
     {
         return _area;
