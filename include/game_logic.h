@@ -121,22 +121,22 @@ public:
         return _gameState == GameState::Play;
     }
 
-    constexpr const Apple* apple() const noexcept
+    constexpr const Apple *apple() const noexcept
     {
         return _apple;
     }
 
-    constexpr const Score* score() const noexcept
+    constexpr const Score *score() const noexcept
     {
         return _score;
     }
 
-    constexpr Score* score() noexcept
+    constexpr Score *score() noexcept
     {
         return _score;
     }
 
-    constexpr const Snake* snake() const noexcept
+    constexpr const Snake *snake() const noexcept
     {
         return _snake;
     }
@@ -154,7 +154,8 @@ private:
 
         // Checks wall collision
         const auto wallCollision = (headPos.x() < 0) + (headPos.y() < 0) +
-                (headPos.x() >= _area.width()) + (headPos.y() >= _area.height());
+                                   (headPos.x() >= _area.width()) +
+                                   (headPos.y() >= _area.height());
 
         if (wallCollision)
         {
@@ -172,7 +173,7 @@ private:
 
     constexpr bool checkBodyCollision(QVector2D pos) const noexcept
     {
-        for (const auto& part : _snake->body())
+        for (const auto &part : _snake->body())
         {
             if (pos == part)
             {
@@ -200,15 +201,15 @@ private:
             newPos.setX(distribX(_gen));
             newPos.setY(distribY(_gen));
 
-        } while(checkAppleCollision(newPos));
+        } while (checkAppleCollision(newPos));
 
         return newPos;
     }
 
 private:
-    Apple* _apple = nullptr;
-    Score* _score = nullptr;
-    Snake* _snake = nullptr;
+    Apple *_apple = nullptr;
+    Score *_score = nullptr;
+    Snake *_snake = nullptr;
 
     QSize _area;
     GameState _gameState = GameState::Pause;

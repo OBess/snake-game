@@ -47,7 +47,7 @@ public:
 
     constexpr void setDirection(Direction direction) noexcept
     {
-        if(_canSetDir)
+        if (_canSetDir)
         {
             _direction = direction;
             _canSetDir = false;

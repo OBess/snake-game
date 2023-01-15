@@ -63,7 +63,6 @@ void SnakeGame::onAppStateEvent(Qt::ApplicationState state)
 #endif // Q_OS_ANDROID
 }
 
-
 void SnakeGame::keyPressEvent(QKeyEvent *event)
 {
 #ifndef Q_OS_ANDROID
@@ -175,7 +174,8 @@ void SnakeGame::setupUI()
     const auto area = _gameLogic->area();
 
     _field = new UI::SnakeField({_gameLogic->snake(), _gameLogic->apple(),
-                                 area.width(), area.height()}, this);
+                                 area.width(), area.height()},
+                                this);
     vLayout->addWidget(_field);
 
     // Sets the layout

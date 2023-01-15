@@ -39,12 +39,12 @@ namespace UI
             _state = state;
         }
 
-        constexpr void setApple(const Apple* apple) noexcept
+        constexpr void setApple(const Apple *apple) noexcept
         {
             _apple = apple;
         }
 
-        constexpr void setSnake(const Snake* snake) noexcept
+        constexpr void setSnake(const Snake *snake) noexcept
         {
             _snake = snake;
         }
@@ -140,7 +140,7 @@ namespace UI
             painter.save();
 
             // Calculates
-            const QRect& rect = event->rect();
+            const QRect &rect = event->rect();
 
             const int32_t width = rect.width() * 0.5;
             const int32_t height = rect.height() * 0.5;
@@ -183,7 +183,7 @@ namespace UI
 #ifndef Q_OS_ANDROID
                 painter.drawText(infoTextX, infoTextY, "Space to start game");
                 painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Arrows or AWSD to move");
-#else // Q_OS_ANDROID
+#else  // Q_OS_ANDROID
                 painter.drawText(infoTextX, infoTextY, "Touch to start game");
                 painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Move by fingers");
 #endif // Q_OS_ANDROID
@@ -202,7 +202,7 @@ namespace UI
 #ifndef Q_OS_ANDROID
                 painter.drawText(infoTextX, infoTextY, "Space to restart game");
                 painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Arrows or AWSD to move");
-#else // Q_OS_ANDROID
+#else  // Q_OS_ANDROID
                 painter.drawText(infoTextX, infoTextY, "Touch to restart game");
                 painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Move by fingers");
 #endif // Q_OS_ANDROID
