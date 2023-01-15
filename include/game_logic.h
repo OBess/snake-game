@@ -184,7 +184,7 @@ private:
         return false;
     }
 
-    constexpr bool freePlaceForApple(QVector2D pos) const noexcept
+    constexpr bool itIsFreePlace(QVector2D pos) const noexcept
     {
         return pos == _snake->headPos() || checkBodyCollision(pos);
     }
@@ -201,7 +201,7 @@ private:
             newPos.setX(distribX(_gen));
             newPos.setY(distribY(_gen));
 
-        } while (freePlaceForApple(newPos));
+        } while (itIsFreePlace(newPos));
 
         return newPos;
     }
