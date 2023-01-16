@@ -9,6 +9,7 @@
 #include "apple.h"
 #include "score.h"
 #include "snake.h"
+#include "sounds.h"
 
 class GameLogic
 {
@@ -73,11 +74,18 @@ public:
             _score->incrementScore();
             _snake->addTailPart();
             _apple->position = randomApplePos();
+
+            _sounds.play(Sounds::Type::Crunch);
         }
-        else if (collisionType == CollisionType::Body ||
-                 collisionType == CollisionType::Wall)
+        else if (collisionType == CollisionType::Body)
         {
             _gameState = GameState::GameOver;
+            _sounds.play(Sounds::Type::Ow);
+        }
+        else if (collisionType == CollisionType::Wall)
+        {
+            _gameState = GameState::GameOver;
+            _sounds.play(Sounds::Type::Hit);
         }
 
         if (checkEndOfGame())
@@ -236,6 +244,8 @@ private:
 
     std::random_device _rd;
     std::mt19937 _gen;
+
+    Sounds _sounds;
 };
 
 #endif // GAME_LOGIC_H
