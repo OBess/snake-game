@@ -95,7 +95,8 @@ namespace UI
 
             // Draws menu
             if (_state == GameLogic::GameState::Pause ||
-                _state == GameLogic::GameState::GameOver)
+                _state == GameLogic::GameState::GameOver ||
+                _state == GameLogic::GameState::EndGame)
             {
                 paintMenu(painter, event);
             }
@@ -147,7 +148,7 @@ namespace UI
             const int32_t x = (rect.width() / 2) - (width / 2);
             const int32_t y = (rect.height() / 2) - (height / 2);
 
-            static const QPen pen(Palette::tileYellow, 10);
+            const QPen pen(Palette::tileYellow, 10);
 
             // Draws rounded rect
             painter.setPen(pen);
@@ -155,12 +156,34 @@ namespace UI
             painter.drawRoundedRect(x, y, width, height, 30, 30);
 
             // Draws icon and text
-            //// Calculates
-            const int32_t imageSize = height / 3;
-            const int32_t imageX = x + width / 5 - imageSize / 2;
-            const int32_t imageY = y + imageSize / 2;
+            if (_state == GameLogic::GameState::Pause)
+            {
+                paintMenuContent(painter, {x, y, width, height},
+                                 Sprites::Icon, "Welcome", "start");
+            }
+            else if (_state == GameLogic::GameState::GameOver)
+            {
+                paintMenuContent(painter, {x, y, width, height},
+                                 Sprites::RedCross, "Game Over", "restart");
+            }
+            else if (_state == GameLogic::GameState::EndGame)
+            {
+                paintMenuContent(painter, {x, y, width, height},
+                                 Sprites::Crown, "End Game", "restart");
+            }
 
-            const int32_t textSize = width / 14;
+            painter.restore();
+        }
+
+        inline void paintMenuContent(QPainter &painter, QRect area, Sprites::Type icon,
+                                     const QString &mainText, const QString &additionalText)
+        {
+            // Calculates
+            const int32_t imageSize = area.height() / 3;
+            const int32_t imageX = area.x() + area.width() / 5 - imageSize / 2;
+            const int32_t imageY = area.y() + imageSize / 2;
+
+            const int32_t textSize = area.width() / 14;
             const int32_t textX = imageX + imageSize + textSize / 3;
             const int32_t textY = imageY + imageSize / 2 + textSize / 2;
 
@@ -168,47 +191,25 @@ namespace UI
             const int32_t infoTextX = imageX;
             const int32_t infoTextY = imageY + imageSize + infoTextSize * 2;
 
-            //// Draws
-            if (_state == GameLogic::GameState::Pause)
-            {
-                painter.setFont(QFont("Arial", textSize, QFont::DemiBold));
-                painter.setPen(Palette::iconText);
+            // Draws the icon
+            painter.drawPixmap(imageX, imageY, imageSize, imageSize, Sprites::getSprite(Sprites::Icon));
 
-                painter.drawPixmap(imageX, imageY, imageSize, imageSize, Sprites::getSprite(Sprites::Icon));
-                painter.drawText(textX, textY, "Welcome");
+            // Draws the main text
+            painter.setFont(QFont("Arial", textSize, QFont::DemiBold));
+            painter.setPen(Palette::iconText);
+            painter.drawText(textX, textY, mainText);
 
-                painter.setFont(QFont("Arial", infoTextSize, QFont::DemiBold));
-                painter.setPen(Palette::infoText);
-
-#ifndef Q_OS_ANDROID
-                painter.drawText(infoTextX, infoTextY, "Space to start game");
-                painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Arrows or AWSD to move");
-#else  // Q_OS_ANDROID
-                painter.drawText(infoTextX, infoTextY, "Touch to start game");
-                painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Move by fingers");
-#endif // Q_OS_ANDROID
-            }
-            else if (_state == GameLogic::GameState::GameOver)
-            {
-                painter.setFont(QFont("Arial", textSize, QFont::DemiBold));
-                painter.setPen(Palette::redCrossText);
-
-                painter.drawPixmap(imageX, imageY, imageSize, imageSize, Sprites::getSprite(Sprites::RedCross));
-                painter.drawText(textX, textY, "Game Over");
-
-                painter.setFont(QFont("Arial", infoTextSize, QFont::DemiBold));
-                painter.setPen(Palette::infoText);
+            // Draws the additional text
+            painter.setFont(QFont("Arial", infoTextSize, QFont::DemiBold));
+            painter.setPen(Palette::infoText);
 
 #ifndef Q_OS_ANDROID
-                painter.drawText(infoTextX, infoTextY, "Space to restart game");
-                painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Arrows or AWSD to move");
+            painter.drawText(infoTextX, infoTextY, "Space to " + additionalText + " game");
+            painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Arrows or AWSD to move");
 #else  // Q_OS_ANDROID
-                painter.drawText(infoTextX, infoTextY, "Touch to restart game");
-                painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Move by fingers");
+            painter.drawText(infoTextX, infoTextY, "Touch to " + additionalText + " game");
+            painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Move by fingers");
 #endif // Q_OS_ANDROID
-            }
-
-            painter.restore();
         }
 
         /// @brief Gets position and size and creates QRect
