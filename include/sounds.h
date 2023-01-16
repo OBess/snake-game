@@ -19,30 +19,19 @@ public:
         init();
     }
 
-    ~Sounds()
+    inline void play(Type type) noexcept
     {
-        delete _crunchPlayer;
-        delete _owPlayer;
-        delete _hitPlayer;
-    }
-
-    inline void play(Type type) const noexcept
-    {
-        if (_inited == false)
+        if (type == Type::Crunch)
         {
-            return;
-        }
-        else if (type == Type::Crunch)
-        {
-            _crunchPlayer->play();
+            _crunchPlayer.play();
         }
         else if (type == Type::Ow)
         {
-            _owPlayer->play();
+            _owPlayer.play();
         }
         else if (type == Type::Hit)
         {
-            _hitPlayer->play();
+            _hitPlayer.play();
         }
     }
 
@@ -50,44 +39,34 @@ private:
     inline void init()
     {
         {
-            _crunchPlayer = new QMediaPlayer;
-
-            QMediaPlaylist *playlist = new QMediaPlaylist(_crunchPlayer);
+            QMediaPlaylist *playlist = new QMediaPlaylist(&_crunchPlayer);
             playlist->addMedia(QUrl("qrc:/resources/sounds/crunch.wav"));
             playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
 
-            _crunchPlayer->setPlaylist(playlist);
+            _crunchPlayer.setPlaylist(playlist);
         }
 
         {
-            _owPlayer = new QMediaPlayer;
-
-            QMediaPlaylist *playlist = new QMediaPlaylist(_owPlayer);
+            QMediaPlaylist *playlist = new QMediaPlaylist(&_owPlayer);
             playlist->addMedia(QUrl("qrc:/resources/sounds/ow.mp3"));
             playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
 
-            _owPlayer->setPlaylist(playlist);
+            _owPlayer.setPlaylist(playlist);
         }
 
         {
-            _hitPlayer = new QMediaPlayer;
-
-            QMediaPlaylist *playlist = new QMediaPlaylist(_hitPlayer);
+            QMediaPlaylist *playlist = new QMediaPlaylist(&_hitPlayer);
             playlist->addMedia(QUrl("qrc:/resources/sounds/hit.wav"));
             playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
 
-            _hitPlayer->setPlaylist(playlist);
+            _hitPlayer.setPlaylist(playlist);
         }
-
-        _inited = true;
     }
 
 private:
-    bool _inited = false;
-
-    QMediaPlayer *_crunchPlayer = nullptr;
-    QMediaPlayer *_owPlayer = nullptr;
-    QMediaPlayer *_hitPlayer = nullptr;
+    QMediaPlayer _crunchPlayer;
+    QMediaPlayer _owPlayer;
+    QMediaPlayer _hitPlayer;
 };
 
 #endif // SOUNDS_H
