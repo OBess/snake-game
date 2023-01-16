@@ -27,7 +27,8 @@ public:
     {
         Play,
         Pause,
-        GameOver
+        GameOver,
+        EndGame
     };
 
     GameLogic(QSize area, uint32_t bestScore)
