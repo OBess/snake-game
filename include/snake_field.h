@@ -105,7 +105,7 @@ namespace UI
         }
 
         /// @brief Draws tiles for grid
-        /// @param painter Where to draw
+        /// @param painter
         /// @param event Gets rect of the area
         inline void paintField(QPainter &painter, QPaintEvent *event)
         {
@@ -136,6 +136,9 @@ namespace UI
             painter.restore();
         }
 
+        /// @brief Draws menu
+        /// @param painter
+        /// @param event Gets rect of the area
         inline void paintMenu(QPainter &painter, QPaintEvent *event)
         {
             painter.save();
@@ -155,7 +158,7 @@ namespace UI
             painter.setBrush(Palette::tileGreen);
             painter.drawRoundedRect(x, y, width, height, 30, 30);
 
-            // Draws icon and text
+            // Draws content
             if (_state == GameLogic::GameState::Pause)
             {
                 paintMenuContent(painter, {x, y, width, height},
@@ -175,40 +178,47 @@ namespace UI
             painter.restore();
         }
 
-        inline void paintMenuContent(QPainter &painter, QRect area, Sprites::Type sprite,
-                                     const QString &mainText, QColor mainTextColor, const QString &additionalText)
+        /// @brief Draws main content for menu
+        /// @param painter
+        /// @param area Where to draw
+        /// @param spriteType The menu image
+        /// @param title The menu title
+        /// @param titleColor Color of the menu title
+        /// @param hint The menu hint
+        inline void paintMenuContent(QPainter &painter, QRect area, Sprites::Type spriteType,
+                                     const QString &title, QColor titleColor, const QString &hint)
         {
             // Calculates
             const int32_t imageSize = area.height() / 3;
             const int32_t imageX = area.x() + area.width() / 5 - imageSize / 2;
             const int32_t imageY = area.y() + imageSize / 2;
 
-            const int32_t textSize = area.width() / 14;
-            const int32_t textX = imageX + imageSize + textSize / 3;
-            const int32_t textY = imageY + imageSize / 2 + textSize / 2;
+            const int32_t titleSize = area.width() / 14;
+            const int32_t titleX = imageX + imageSize + titleSize / 3;
+            const int32_t titleY = imageY + imageSize / 2 + titleSize / 2;
 
-            const int32_t infoTextSize = textSize / 3.5;
-            const int32_t infoTextX = imageX;
-            const int32_t infoTextY = imageY + imageSize + infoTextSize * 2;
+            const int32_t hintsSize = titleSize / 3.5;
+            const int32_t hintsX = imageX;
+            const int32_t hintsY = imageY + imageSize + hintsSize * 2;
 
             // Draws the icon
-            painter.drawPixmap(imageX, imageY, imageSize, imageSize, Sprites::getSprite(sprite));
+            painter.drawPixmap(imageX, imageY, imageSize, imageSize, Sprites::getSprite(spriteType));
 
             // Draws the main text
-            painter.setFont(QFont("Arial", textSize, QFont::DemiBold));
-            painter.setPen(mainTextColor);
-            painter.drawText(textX, textY, mainText);
+            painter.setFont(QFont("Arial", titleSize, QFont::DemiBold));
+            painter.setPen(titleColor);
+            painter.drawText(titleX, titleY, title);
 
             // Draws the additional text
-            painter.setFont(QFont("Arial", infoTextSize, QFont::DemiBold));
+            painter.setFont(QFont("Arial", hintsSize, QFont::DemiBold));
             painter.setPen(Palette::infoText);
 
 #ifndef Q_OS_ANDROID
-            painter.drawText(infoTextX, infoTextY, "Space to " + additionalText + " game");
-            painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Arrows or AWSD to move");
+            painter.drawText(hintsX, hintsY, "Space to " + hint + " game");
+            painter.drawText(hintsX, hintsY + hintsSize * 2, "Arrows or AWSD to move");
 #else  // Q_OS_ANDROID
-            painter.drawText(infoTextX, infoTextY, "Touch to " + additionalText + " game");
-            painter.drawText(infoTextX, infoTextY + infoTextSize * 2, "Move by fingers");
+            painter.drawText(hintsX, hintsY, "Touch to " + hint + " game");
+            painter.drawText(hintsX, hintsY + hintsSize * 2, "Move by fingers");
 #endif // Q_OS_ANDROID
         }
 
@@ -221,7 +231,7 @@ namespace UI
             return QRect(point.toPoint(), QSize(size, size));
         }
 
-        /// @brief Gets vectors to and from the current body and returns proper direction for getting sprite
+        /// @brief Gets vectors to and from the current body and returns proper direction for getting spriteType
         /// @param lhs A vector that directed to the current body part
         /// @param rhs A vector that directed from the current body part
         /// @return Direction
