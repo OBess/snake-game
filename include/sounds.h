@@ -52,7 +52,7 @@ private:
         {
             _crunchPlayer = new QMediaPlayer;
 
-            QMediaPlaylist * playlist = new QMediaPlaylist(_crunchPlayer);
+            QMediaPlaylist *playlist = new QMediaPlaylist(_crunchPlayer);
             playlist->addMedia(QUrl("qrc:/resources/sound/crunch.wav"));
             playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
 
@@ -62,7 +62,7 @@ private:
         {
             _owPlayer = new QMediaPlayer;
 
-            QMediaPlaylist * playlist = new QMediaPlaylist(_owPlayer);
+            QMediaPlaylist *playlist = new QMediaPlaylist(_owPlayer);
             playlist->addMedia(QUrl("qrc:/resources/sound/ow.mp3"));
             playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
 
@@ -70,9 +70,9 @@ private:
         }
 
         {
-             _hitPlayer = new QMediaPlayer;
+            _hitPlayer = new QMediaPlayer;
 
-            QMediaPlaylist * playlist = new QMediaPlaylist(_hitPlayer);
+            QMediaPlaylist *playlist = new QMediaPlaylist(_hitPlayer);
             playlist->addMedia(QUrl("qrc:/resources/sound/hit.wav"));
             playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
 
@@ -85,10 +85,9 @@ private:
 private:
     bool _inited = false;
 
-    QMediaPlayer* _crunchPlayer = nullptr;
-    QMediaPlayer* _owPlayer = nullptr;
-    QMediaPlayer* _hitPlayer = nullptr;
-
+    QMediaPlayer *_crunchPlayer = nullptr;
+    QMediaPlayer *_owPlayer = nullptr;
+    QMediaPlayer *_hitPlayer = nullptr;
 };
 
 #endif // SOUNDS_H
