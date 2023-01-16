@@ -231,7 +231,7 @@ namespace UI
             return QRect(point.toPoint(), QSize(size, size));
         }
 
-        /// @brief Gets vectors to and from the current body and returns proper direction for getting spriteType
+        /// @brief Gets vectors to and from the current body and returns proper direction for getting sprite
         /// @param lhs A vector that directed to the current body part
         /// @param rhs A vector that directed from the current body part
         /// @return Direction
