@@ -7,6 +7,7 @@
 
 #include "apple.h"
 #include "direction.h"
+#include "game_logic.h"
 #include "palette.h"
 #include "snake.h"
 #include "sprites.h"
@@ -21,16 +22,31 @@ namespace UI
         int32_t rols;
     };
 
-    class SnakeField : public QOpenGLWidget
+    class SnakeField : public QWidget
     {
         Q_OBJECT
 
     public:
         explicit SnakeField(SnakeFieldArgs args, QWidget *parent = nullptr)
-            : QOpenGLWidget{parent}, _snake{args.snake}, _apple{args.apple},
+            : QWidget{parent}, _snake{args.snake}, _apple{args.apple},
               _cols(args.cols), _rows(args.rols)
         {
             setMinimumSize(970, 500);
+        }
+
+        constexpr void setState(GameLogic::GameState state) noexcept
+        {
+            _state = state;
+        }
+
+        constexpr void setApple(const Apple *apple) noexcept
+        {
+            _apple = apple;
+        }
+
+        constexpr void setSnake(const Snake *snake) noexcept
+        {
+            _snake = snake;
         }
 
     private:
@@ -38,6 +54,11 @@ namespace UI
         {
             QPainter painter;
             painter.begin(this);
+
+            // Calculates
+            _tileSize = std::min(event->rect().width() / _cols, event->rect().height() / _rows);
+            _offset = QVector2D((event->rect().width() - _tileSize * _cols) / 2,
+                                (event->rect().height() - _tileSize * _rows) / 2);
 
             // Draws tiles for field
             paintField(painter, event);
@@ -72,23 +93,25 @@ namespace UI
                                Sprites::getSprite(vectorToDir(body.back() - body[body.size() - 2]),
                                                   Sprites::SnakeTail));
 
+            // Draws menu
+            if (_state == GameLogic::GameState::Pause ||
+                _state == GameLogic::GameState::GameOver ||
+                _state == GameLogic::GameState::EndGame)
+            {
+                paintMenu(painter, event);
+            }
+
             painter.end();
         }
 
         /// @brief Draws tiles for grid
-        /// @param painter Where to draw
+        /// @param painter
         /// @param event Gets rect of the area
         inline void paintField(QPainter &painter, QPaintEvent *event)
         {
             painter.save();
 
-            const auto rect = event->rect();
-
-            painter.fillRect(rect, Palette::background);
-
-            _tileSize = std::min(rect.width() / _cols, rect.height() / _rows);
-            _offset = QVector2D((rect.width() - _tileSize * _cols) / 2,
-                                (rect.height() - _tileSize * _rows) / 2);
+            painter.fillRect(event->rect(), Palette::background);
 
             int32_t x = _offset.x();
             int32_t y = _offset.y();
@@ -111,6 +134,92 @@ namespace UI
             }
 
             painter.restore();
+        }
+
+        /// @brief Draws menu
+        /// @param painter
+        /// @param event Gets rect of the area
+        inline void paintMenu(QPainter &painter, QPaintEvent *event)
+        {
+            painter.save();
+
+            // Calculates
+            const QRect &rect = event->rect();
+
+            const int32_t width = rect.width() * 0.5;
+            const int32_t height = rect.height() * 0.5;
+            const int32_t x = (rect.width() / 2) - (width / 2);
+            const int32_t y = (rect.height() / 2) - (height / 2);
+
+            const QPen pen(Palette::tileYellow, 10);
+
+            // Draws rounded rect
+            painter.setPen(pen);
+            painter.setBrush(Palette::tileGreen);
+            painter.drawRoundedRect(x, y, width, height, 30, 30);
+
+            // Draws content
+            if (_state == GameLogic::GameState::Pause)
+            {
+                paintMenuContent(painter, {x, y, width, height},
+                                 Sprites::Icon, "Welcome", Palette::iconText, "start");
+            }
+            else if (_state == GameLogic::GameState::GameOver)
+            {
+                paintMenuContent(painter, {x, y, width, height},
+                                 Sprites::RedCross, "Game Over", Palette::redCrossText, "restart");
+            }
+            else if (_state == GameLogic::GameState::EndGame)
+            {
+                paintMenuContent(painter, {x, y, width, height},
+                                 Sprites::Cup, "End Game", Palette::cup, "restart");
+            }
+
+            painter.restore();
+        }
+
+        /// @brief Draws main content for menu
+        /// @param painter
+        /// @param area Where to draw
+        /// @param spriteType The menu image
+        /// @param title The menu title
+        /// @param titleColor Color of the menu title
+        /// @param hint The menu hint
+        inline void paintMenuContent(QPainter &painter, QRect area, Sprites::Type spriteType,
+                                     const QString &title, QColor titleColor, const QString &hint)
+        {
+            // Calculates
+            const int32_t imageSize = area.height() / 3;
+            const int32_t imageX = area.x() + area.width() / 5 - imageSize / 2;
+            const int32_t imageY = area.y() + imageSize / 2;
+
+            const int32_t titleSize = area.width() / 14;
+            const int32_t titleX = imageX + imageSize + titleSize / 3;
+            const int32_t titleY = imageY + imageSize / 2 + titleSize / 2;
+
+            const int32_t hintsSize = titleSize / 3.5;
+            const int32_t hintsX = imageX;
+            const int32_t hintsY = imageY + imageSize + hintsSize * 2;
+
+            // Draws the icon
+            painter.drawPixmap(imageX, imageY, imageSize, imageSize, Sprites::getSprite(spriteType));
+
+            // Draws the main text
+            painter.setFont(QFont("Arial", titleSize, QFont::DemiBold));
+            painter.setPen(titleColor);
+            painter.drawText(titleX, titleY, title);
+
+            // Draws the additional text
+            painter.setFont(QFont("Arial", hintsSize, QFont::DemiBold));
+            painter.setPen(Palette::infoText);
+
+#ifndef Q_OS_ANDROID
+            painter.drawText(hintsX, hintsY, "Space to " + hint + " game");
+            painter.drawText(hintsX, hintsY + hintsSize * 2, "Arrows or AWSD to move");
+#else  // Q_OS_ANDROID
+            painter.drawText(hintsX, hintsY, "Touch to " + hint + " game");
+            painter.drawText(hintsX, hintsY + hintsSize * 2, "Move by fingers");
+#endif // Q_OS_ANDROID
         }
 
         /// @brief Gets position and size and creates QRect
@@ -160,8 +269,10 @@ namespace UI
         const Snake *_snake;
         const struct Apple *_apple;
 
-        int32_t _tileSize = 1;
+        int32_t _tileSize;
         QVector2D _offset;
+
+        GameLogic::GameState _state{GameLogic::GameState::Pause};
 
         const int32_t _cols;
         const int32_t _rows;

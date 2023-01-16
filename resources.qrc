@@ -1,21 +1,23 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/apple.png</file>
-        <file>resources/body_bottomleft.png</file>
-        <file>resources/body_bottomright.png</file>
-        <file>resources/body_horizontal.png</file>
-        <file>resources/body_topleft.png</file>
-        <file>resources/body_topright.png</file>
-        <file>resources/body_vertical.png</file>
-        <file>resources/head_down.png</file>
-        <file>resources/head_left.png</file>
-        <file>resources/head_right.png</file>
-        <file>resources/head_up.png</file>
-        <file>resources/tail_down.png</file>
-        <file>resources/tail_left.png</file>
-        <file>resources/tail_right.png</file>
-        <file>resources/tail_up.png</file>
-        <file>resources/cup.png</file>
-        <file>resources/goal.png</file>
+        <file>resources/images/apple.png</file>
+        <file>resources/images/body_bottomleft.png</file>
+        <file>resources/images/body_bottomright.png</file>
+        <file>resources/images/body_horizontal.png</file>
+        <file>resources/images/body_topleft.png</file>
+        <file>resources/images/body_topright.png</file>
+        <file>resources/images/body_vertical.png</file>
+        <file>resources/images/cup.png</file>
+        <file>resources/images/goal.png</file>
+        <file>resources/images/head_down.png</file>
+        <file>resources/images/head_left.png</file>
+        <file>resources/images/head_right.png</file>
+        <file>resources/images/head_up.png</file>
+        <file>resources/images/icon.png</file>
+        <file>resources/images/red_cross.png</file>
+        <file>resources/images/tail_down.png</file>
+        <file>resources/images/tail_left.png</file>
+        <file>resources/images/tail_right.png</file>
+        <file>resources/images/tail_up.png</file>
     </qresource>
 </RCC>

@@ -15,7 +15,7 @@ namespace UI
         Q_OBJECT
 
     public:
-        explicit SnakeScore(const Score* score, QWidget *parent = nullptr)
+        explicit SnakeScore(const Score *score, QWidget *parent = nullptr)
             : QOpenGLWidget(parent), _score(score)
         {
             setFixedHeight(50);
