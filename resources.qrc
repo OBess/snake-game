@@ -19,6 +19,5 @@
         <file>resources/images/tail_left.png</file>
         <file>resources/images/tail_right.png</file>
         <file>resources/images/tail_up.png</file>
-        <file>resources/images/crown.png</file>
     </qresource>
 </RCC>

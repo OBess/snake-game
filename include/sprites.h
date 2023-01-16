@@ -22,8 +22,7 @@ namespace Sprites
         Goal,
 
         Icon,
-        RedCross,
-        Crown
+        RedCross
     };
 
     /// @brief Returns a loaded sprite corresponding to the direction and type of sprite
@@ -59,7 +58,6 @@ namespace Sprites
 
         static const QPixmap icon("://resources/images/icon.png");
         static const QPixmap redCross("://resources/images/red_cross.png");
-        static const QPixmap crown("://resources/images/crown.png");
 
         if (type == Type::Apple)
         {
@@ -117,10 +115,6 @@ namespace Sprites
         else if (type == Type::RedCross)
         {
             return redCross;
-        }
-        else if (type == Type::Crown)
-        {
-            return crown;
         }
 
         return empty;

@@ -159,24 +159,24 @@ namespace UI
             if (_state == GameLogic::GameState::Pause)
             {
                 paintMenuContent(painter, {x, y, width, height},
-                                 Sprites::Icon, "Welcome", "start");
+                                 Sprites::Icon, "Welcome", Palette::iconText, "start");
             }
             else if (_state == GameLogic::GameState::GameOver)
             {
                 paintMenuContent(painter, {x, y, width, height},
-                                 Sprites::RedCross, "Game Over", "restart");
+                                 Sprites::RedCross, "Game Over", Palette::redCrossText, "restart");
             }
             else if (_state == GameLogic::GameState::EndGame)
             {
                 paintMenuContent(painter, {x, y, width, height},
-                                 Sprites::Crown, "End Game", "restart");
+                                 Sprites::Cup, "End Game", Palette::cup, "restart");
             }
 
             painter.restore();
         }
 
-        inline void paintMenuContent(QPainter &painter, QRect area, Sprites::Type icon,
-                                     const QString &mainText, const QString &additionalText)
+        inline void paintMenuContent(QPainter &painter, QRect area, Sprites::Type sprite,
+                                     const QString &mainText, QColor mainTextColor, const QString &additionalText)
         {
             // Calculates
             const int32_t imageSize = area.height() / 3;
@@ -192,11 +192,11 @@ namespace UI
             const int32_t infoTextY = imageY + imageSize + infoTextSize * 2;
 
             // Draws the icon
-            painter.drawPixmap(imageX, imageY, imageSize, imageSize, Sprites::getSprite(Sprites::Icon));
+            painter.drawPixmap(imageX, imageY, imageSize, imageSize, Sprites::getSprite(sprite));
 
             // Draws the main text
             painter.setFont(QFont("Arial", textSize, QFont::DemiBold));
-            painter.setPen(Palette::iconText);
+            painter.setPen(mainTextColor);
             painter.drawText(textX, textY, mainText);
 
             // Draws the additional text

@@ -37,6 +37,9 @@ public:
         _snake = new Snake(Direction::Up, QVector2D(_area.width() / 2, _area.height() / 2));
         _apple = new Apple(_snake->headPos());
         _score = new Score(bestScore);
+
+        // To end the game player needs to gain ~70% of apples from the area size
+        _winScore = (_area.width() * _area.height()) * 0.7f;
     }
 
     ~GameLogic()
@@ -58,7 +61,7 @@ public:
 
     constexpr void update()
     {
-        if (_gameState == GameState::Pause || _gameState == GameState::GameOver)
+        if (doesGameGoOn() == false)
             return;
 
         _snake->move();
@@ -75,6 +78,11 @@ public:
                  collisionType == CollisionType::Wall)
         {
             _gameState = GameState::GameOver;
+        }
+
+        if (checkEndOfGame())
+        {
+            _gameState = GameState::EndGame;
         }
     }
 
@@ -148,6 +156,11 @@ public:
     }
 
 private:
+    constexpr bool checkEndOfGame() const noexcept
+    {
+        return _score->currentScore() == _winScore;
+    }
+
     constexpr CollisionType checkCollision() const noexcept
     {
         const auto headPos = _snake->headPos();
@@ -219,6 +232,7 @@ private:
 
     QSize _area;
     GameState _gameState = GameState::Pause;
+    uint32_t _winScore{std::numeric_limits<uint32_t>::max()};
 
     std::random_device _rd;
     std::mt19937 _gen;
