@@ -53,7 +53,7 @@ private:
             _crunchPlayer = new QMediaPlayer;
 
             QMediaPlaylist *playlist = new QMediaPlaylist(_crunchPlayer);
-            playlist->addMedia(QUrl("qrc:/resources/sound/crunch.wav"));
+            playlist->addMedia(QUrl("qrc:/resources/sounds/crunch.wav"));
             playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
 
             _crunchPlayer->setPlaylist(playlist);
@@ -63,7 +63,7 @@ private:
             _owPlayer = new QMediaPlayer;
 
             QMediaPlaylist *playlist = new QMediaPlaylist(_owPlayer);
-            playlist->addMedia(QUrl("qrc:/resources/sound/ow.mp3"));
+            playlist->addMedia(QUrl("qrc:/resources/sounds/ow.mp3"));
             playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
 
             _owPlayer->setPlaylist(playlist);
@@ -73,7 +73,7 @@ private:
             _hitPlayer = new QMediaPlayer;
 
             QMediaPlaylist *playlist = new QMediaPlaylist(_hitPlayer);
-            playlist->addMedia(QUrl("qrc:/resources/sound/hit.wav"));
+            playlist->addMedia(QUrl("qrc:/resources/sounds/hit.wav"));
             playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
 
             _hitPlayer->setPlaylist(playlist);

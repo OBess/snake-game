@@ -19,8 +19,8 @@
         <file>resources/images/tail_left.png</file>
         <file>resources/images/tail_right.png</file>
         <file>resources/images/tail_up.png</file>
-        <file>resources/sound/crunch.wav</file>
-        <file>resources/sound/ow.mp3</file>
-        <file>resources/sound/hit.wav</file>
+        <file>resources/sounds/crunch.wav</file>
+        <file>resources/sounds/hit.wav</file>
+        <file>resources/sounds/ow.mp3</file>
     </qresource>
 </RCC>
