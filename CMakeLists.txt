@@ -15,6 +15,7 @@ if(ANDROID)
     set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
 endif()
 
+find_package(Qt5 REQUIRED COMPONENTS Multimedia)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -42,7 +43,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(snake-game PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(snake-game PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia)
 target_include_directories(snake-game PRIVATE include)
 
 set_target_properties(snake-game PROPERTIES
