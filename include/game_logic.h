@@ -55,6 +55,11 @@ public:
         _gameState = GameState::Play;
     }
 
+    constexpr void play() noexcept
+    {
+        _gameState = GameState::Play;
+    }
+
     constexpr void update()
     {
         if (doesGameGoOn() == false)

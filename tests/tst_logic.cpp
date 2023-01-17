@@ -92,7 +92,6 @@ private slots:
         gameLogic.setDirection(Direction::Right);
         gameLogic.update();
 
-
         QCOMPARE(gameLogic.gameState(), GameLogic::GameState::GameOver);
     }
 };
