@@ -128,11 +128,6 @@ public:
         return _snake->getDirection();
     }
 
-    constexpr void setArea(QSize area) noexcept
-    {
-        _area = area;
-    }
-
     constexpr QSize area() const noexcept
     {
         return _area;
@@ -144,6 +139,11 @@ public:
     }
 
     constexpr const Apple *apple() const noexcept
+    {
+        return _apple;
+    }
+
+    constexpr Apple *apple() noexcept
     {
         return _apple;
     }
@@ -213,7 +213,7 @@ private:
 
     constexpr bool itIsFreePlace(QVector2D pos) const noexcept
     {
-        return pos == _snake->headPos() || checkBodyCollision(pos);
+        return (pos == _snake->headPos()) + checkBodyCollision(pos);
     }
 
     inline QVector2D randomApplePos() noexcept
