@@ -76,7 +76,7 @@ private slots:
          *     b
          *     b
          *     t
-        */
+         */
         Snake snake(Direction::Up, pos);
         snake.move();
 
@@ -87,7 +87,7 @@ private slots:
          *     b
          *     t
          *
-        */
+         */
         snake.setDirection(Direction::Left);
         snake.move();
 
@@ -98,7 +98,7 @@ private slots:
          *     t
          *
          *
-        */
+         */
         snake.setDirection(Direction::Up);
         snake.move();
 
@@ -158,7 +158,7 @@ private:
     {
         const float x = pos.x();
         float y = pos.y() + 1;
-        for (const auto& part : snake.body())
+        for (const auto &part : snake.body())
         {
             QCOMPARE(part, QVector2D(x, y));
             ++y;
@@ -169,7 +169,7 @@ private:
     {
         float x = pos.x() + 1;
         const float y = pos.y();
-        for (const auto& part : snake.body())
+        for (const auto &part : snake.body())
         {
             QCOMPARE(part, QVector2D(x, y));
             ++x;
