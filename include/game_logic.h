@@ -138,6 +138,11 @@ public:
         return _apple;
     }
 
+    constexpr Apple *apple() noexcept
+    {
+        return _apple;
+    }
+
     constexpr const Score *score() const noexcept
     {
         return _score;
