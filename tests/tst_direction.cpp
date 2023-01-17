@@ -7,7 +7,7 @@ class DirectionTest : public QObject
     Q_OBJECT
 
 private slots:
-    inline void tDirToVector()
+    inline void tDirToVector() noexcept
     {
         // Four main directions
         QCOMPARE(dirToVector(Direction::Up), QVector2D(0, -1));
@@ -29,7 +29,7 @@ private slots:
         QCOMPARE(dirToVector(Direction::RightDown), QVector2D(0, 0));
     }
 
-    inline void tVectorToDir()
+    inline void tVectorToDir() noexcept
     {
         // Four main directions
         QCOMPARE(vectorToDir(QVector2D(0, -1)), Direction::Up);
@@ -43,7 +43,7 @@ private slots:
         QCOMPARE(vectorToDir(QVector2D(0, 0)), Direction::Invalid);
     }
 
-    inline void tIsOpposite()
+    inline void tIsOpposite() noexcept
     {
         // Four main directions
         QVERIFY(isOpposite(Direction::Left, Direction::Right));
