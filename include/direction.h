@@ -59,13 +59,13 @@ constexpr QVector2D dirToVector(Direction direction) noexcept
 /// @returnDirection
 constexpr Direction vectorToDir(QVector2D direction) noexcept
 {
-    if (direction.x() > 0)
+    if (direction.x() > 0 && direction.y() == 0)
         return Direction::Right;
-    else if (direction.x() < 0)
+    else if (direction.x() < 0 && direction.y() == 0)
         return Direction::Left;
-    else if (direction.y() > 0)
+    else if (direction.x() == 0 && direction.y() > 0)
         return Direction::Down;
-    else if (direction.y() < 0)
+    else if (direction.x() == 0 && direction.y() < 0)
         return Direction::Up;
 
     return {};
