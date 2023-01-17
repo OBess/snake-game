@@ -11,11 +11,6 @@ public:
     {
     }
 
-    constexpr void setBestScore(uint32_t bestScore) noexcept
-    {
-        _bestScore = bestScore;
-    }
-
     constexpr uint32_t bestScore() const noexcept
     {
         return _bestScore;
