@@ -16,8 +16,8 @@ if(ANDROID)
 endif()
 
 find_package(Qt5 REQUIRED COMPONENTS Multimedia)
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Test)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Test)
 
 file(GLOB_RECURSE files src/*.cpp include/*.h *.qrc *.rc)
 
@@ -61,3 +61,5 @@ install(TARGETS snake-game
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(snake-game)
 endif()
+
+add_subdirectory(tests)
