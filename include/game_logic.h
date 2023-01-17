@@ -55,11 +55,6 @@ public:
         _gameState = GameState::Play;
     }
 
-    constexpr void play() noexcept
-    {
-        _gameState = GameState::Play;
-    }
-
     constexpr void update()
     {
         if (doesGameGoOn() == false)
@@ -126,11 +121,6 @@ public:
     constexpr Direction getDirection() const noexcept
     {
         return _snake->getDirection();
-    }
-
-    constexpr void setArea(QSize area) noexcept
-    {
-        _area = area;
     }
 
     constexpr QSize area() const noexcept
@@ -213,7 +203,7 @@ private:
 
     constexpr bool itIsFreePlace(QVector2D pos) const noexcept
     {
-        return pos == _snake->headPos() || checkBodyCollision(pos);
+        return (pos == _snake->headPos()) + checkBodyCollision(pos);
     }
 
     inline QVector2D randomApplePos() noexcept

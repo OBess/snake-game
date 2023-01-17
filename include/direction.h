@@ -77,8 +77,8 @@ constexpr Direction vectorToDir(QVector2D direction) noexcept
 /// @return True, if lhs and rhs are opposite directions, otherwise False
 constexpr bool isOpposite(Direction lhs, Direction rhs) noexcept
 {
-    return (lhs == Direction::Left && rhs == Direction::Right) || (lhs == Direction::Right && rhs == Direction::Left) ||
-           (lhs == Direction::Up && rhs == Direction::Down) || (lhs == Direction::Down && rhs == Direction::Up);
+    return (lhs == Direction::Left && rhs == Direction::Right) + (lhs == Direction::Right && rhs == Direction::Left) +
+           (lhs == Direction::Up && rhs == Direction::Down) + (lhs == Direction::Down && rhs == Direction::Up);
 }
 
 #endif // DIRECTION_H

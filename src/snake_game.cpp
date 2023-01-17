@@ -42,7 +42,7 @@ void SnakeGame::onAppStateEvent(Qt::ApplicationState state)
 
     static bool paused = false;
 
-    // When user hide application on android OS
+    // When user hide application on android
     if (state == Qt::ApplicationInactive ||
         state == Qt::ApplicationSuspended ||
         state == Qt::ApplicationHidden)
@@ -119,17 +119,18 @@ void SnakeGame::mouseMoveEvent(QMouseEvent *event)
 
     if (_gameLogic->doesGameGoOn())
     {
+        // Finds vector to current finger position
         QVector2D vector(event->pos() - fingerLastPos);
 
         if (vector.length() > lengthToMove)
         {
             vector.normalize();
 
-            //
+            // Finds how hard the user moves finger by axis
             auto closeX = 1 - std::abs(vector.x());
             auto closeY = 1 - std::abs(vector.y());
 
-            //
+            // The smallest value of the axis is the main direction of the finger
             if (closeX < closeY)
             {
                 closeX = 1 * (vector.x() < 0 ? -1 : 1);
@@ -144,7 +145,7 @@ void SnakeGame::mouseMoveEvent(QMouseEvent *event)
             _gameLogic->setDirection(vectorToDir({closeX, closeY}));
         }
 
-        //
+        // Saves to find the next vector from the finger direction
         fingerLastPos = event->pos();
     }
 #endif // Q_OS_ANDROID
