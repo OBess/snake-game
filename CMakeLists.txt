@@ -15,9 +15,8 @@ if(ANDROID)
     set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
 endif()
 
-find_package(Qt5 REQUIRED COMPONENTS Multimedia)
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Test)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Test)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Test Multimedia)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Test Multimedia)
 
 file(GLOB_RECURSE files src/*.cpp include/*.h *.qrc *.rc)
 
